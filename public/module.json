@@ -10,11 +10,11 @@
   ],
   "url": "test url",
   "license": "GPL-3.0-or-later",
-  "readme": "https://github.com/OmegaRogue/pf2e-mobile-sheet",
-  "version": "This is auto replaced",
+  "readme": "https://github.com/TheBadong/pf2e-mobile/blob/main/readme.md",
+  "version": "v0.1",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12"
+    "minimum": "13",
+    "verified": "13"
   },
   "scripts": [],
   "esmodules": ["main.js"],
@@ -24,8 +24,29 @@
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
   "bugs": "https://github.com/OmegaRogue/pf2e-mobile-sheet/issues",
-  "changelog": "This is auto replaced",
   "library": false,
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "manifest": "https://github.com/foundryvtt/pf2e/blob/v13-dev/system.pf2e.json",
+        "compatibility": {
+          "verified": "7.11.2"
+        }
+      }
+    ],
+    "requires": [
+      {
+        "id": "mobile-improvements",
+        "type": "module",
+        "manifest": "https://gitlab.com/fvtt-modules-lab/mobile-improvements/-/blob/master/src/module.json",
+        "compatibility": {
+          "verified": "?"
+        }
+      }
+    ]
+  },
   "flags": {
     "hotReload": {
       "extensions": ["css", "html", "hbs", "json", "js", "js.map", "mjs"],

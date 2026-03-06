@@ -5,7 +5,7 @@ const currentPath = import.meta.dirname;
 
 const foundryDataPath = process.env.DATA_PATH;
 
-const moduleName = 'fvtt-mobile';
+const moduleName = 'pf2e-mobile';
 
 if (!foundryDataPath) {
   console.error(
