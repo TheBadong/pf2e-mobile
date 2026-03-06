@@ -4,7 +4,7 @@ export default defineConfig({
   build: {
     lib: {
       name: 'fvttMobile',
-      entry: ['src/scripts/main.ts'],
+      entry: ['src/main.ts'],
     },
     rollupOptions: {
       output: {
