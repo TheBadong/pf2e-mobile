@@ -1,0 +1,36 @@
+{
+  "id": "pf2e-mobile",
+  "title": "PF2E Mobile",
+  "description": "Make pf2e compatible with the mobile-improvements module",
+  "authors": [
+    {
+      "name": "Badong",
+      "email": "gautier.bardon@gmail.com"
+    }
+  ],
+  "url": "test url",
+  "license": "GPL-3.0-or-later",
+  "readme": "https://github.com/OmegaRogue/pf2e-mobile-sheet",
+  "version": "This is auto replaced",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12"
+  },
+  "scripts": [],
+  "esmodules": ["main.js"],
+  "styles": ["styles/fvttmobile.css"],
+  "packs": [],
+  "socket": true,
+  "manifest": "This is auto replaced",
+  "download": "This is auto replaced",
+  "bugs": "https://github.com/OmegaRogue/pf2e-mobile-sheet/issues",
+  "changelog": "This is auto replaced",
+  "library": false,
+  "flags": {
+    "hotReload": {
+      "extensions": ["css", "html", "hbs", "json", "js", "js.map", "mjs"],
+      "paths": ["lang", "templates", "styles"]
+    },
+    "allowBugReporter": true
+  }
+}
