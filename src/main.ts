@@ -19,16 +19,20 @@ Hooks.on('renderCharacterSheetPF2e', async (app, html, data) => {
   const activeItem = navigationRow?.querySelector('.active');
   const characterRecapItem = activeItem?.cloneNode(true) as Element;
   characterRecapItem.classList.remove('active');
+  characterRecapItem.setAttribute('data-tab', 'sidebar');
   characterRecapItem
     .querySelector('i')
     ?.classList.replace('fa-address-card', 'fa-bars');
   navigationRow?.insertBefore(characterRecapItem, navigationRow.childNodes[2]);
 
-  // Open new page
+  // Load "sidebar" page, and append it to the sheet content
   const foo = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/recap-page.hbs`,
     { world: 'world' },
   );
 
-  console.debug(foo);
+  html
+    .get(0)
+    ?.querySelector('.sheet-content')
+    ?.insertAdjacentHTML('beforeend', foo);
 });
