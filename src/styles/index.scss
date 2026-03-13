@@ -1,3 +1,13 @@
 body {
-  background-color: red;
+  background-color: green;
+}
+
+.sidebar-section[data-tab='sidebar'] {
+  aside {
+    background-image: none !important;
+
+    & > .logo {
+      display: none;
+    }
+  }
 }

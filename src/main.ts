@@ -25,14 +25,20 @@ Hooks.on('renderCharacterSheetPF2e', async (app, html, data) => {
     ?.classList.replace('fa-address-card', 'fa-bars');
   navigationRow?.insertBefore(characterRecapItem, navigationRow.childNodes[2]);
 
-  // Load "sidebar" page, and append it to the sheet content
-  const foo = await foundry.applications.handlebars.renderTemplate(
-    `modules/${MODULE_ID}/templates/recap-page.hbs`,
-    { world: 'world' },
-  );
+  // Remove the original sidebar and move it to the sheet content sections
+  console.debug('DOM', document);
+  const mainPageForm = document.querySelector('.window-content > form');
+  const mainPageAside = mainPageForm?.querySelector('aside');
+  if (!mainPageAside) {
+    console.error('Error parsing DOM! Mobile mode will not function properly.');
+    return;
+  }
 
-  html
-    .get(0)
-    ?.querySelector('.sheet-content')
-    ?.insertAdjacentHTML('beforeend', foo);
+  const sidebarSection = document.createElement('section');
+  sidebarSection.classList.add('tab', 'sidebar-section', 'major');
+  sidebarSection.setAttribute('data-group', 'primary');
+  sidebarSection.setAttribute('data-tab', 'sidebar');
+  sidebarSection.appendChild(mainPageAside);
+
+  html.get(0)?.querySelector('.sheet-content')?.appendChild(sidebarSection);
 });
