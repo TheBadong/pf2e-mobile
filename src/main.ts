@@ -1,3 +1,4 @@
+import { MODULE_ID } from './config';
 import './styles/index.scss';
 
 // CONFIG.debug.hooks = !CONFIG.debug.hooks;
@@ -5,28 +6,54 @@ import './styles/index.scss';
 
 console.log('init module2');
 
+const sidebarLocations = {
+  default: 'default',
+  sheet: 'sheet',
+} as const;
+
+type SidebarLocation = keyof typeof sidebarLocations | null;
+
 Hooks.once('init', () => {
   console.debug('pf2e mobile startss');
+  // Reset session
+  sessionStorage.removeItem(`${MODULE_ID}_sidebar_state`);
 });
 
 /**
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
+  console.debug({ _app, _data });
   const parsedHtml = html.get(0);
   if (!parsedHtml) {
     throw new Error('Could not get character sheet render even html.');
   }
-  // Add the new button and icon, based on the current active Item
+
+  const sidebarLocation = sessionStorage.getItem(
+    `${MODULE_ID}_sidebar_state`,
+  ) as SidebarLocation;
+
+  // Build the new button
+  const sidebarItemButton = document.createElement('a');
+  sidebarItemButton.setAttribute('data-tab', 'sidebar');
+  sidebarItemButton.role = 'tab';
+  sidebarItemButton.classList.add('item');
+  // If the current sidebar state is 'sheet', set the sidebar tab as active
+  if (sidebarLocation === 'sheet') {
+    parsedHtml.querySelectorAll('.sheet-navigation > .item').forEach((node) => {
+      node.classList.remove('active');
+    });
+    sidebarItemButton.classList.add('active');
+  }
+
+  // Button icon
+  const sidebarItemIcon = document.createElement('i');
+  sidebarItemIcon.classList.add('fa-solid', 'fa-bars');
+  sidebarItemButton.appendChild(sidebarItemIcon);
+
+  // Append the new button to the navigation row
   const navigationRow = parsedHtml?.querySelector('.sheet-navigation');
-  const activeItem = navigationRow?.querySelector('.active');
-  const characterRecapItem = activeItem?.cloneNode(true) as Element;
-  characterRecapItem.classList.remove('active');
-  characterRecapItem.setAttribute('data-tab', 'sidebar');
-  characterRecapItem
-    .querySelector('i')
-    ?.classList.replace('fa-address-card', 'fa-bars');
-  navigationRow?.insertBefore(characterRecapItem, navigationRow.childNodes[2]);
+  navigationRow?.insertBefore(sidebarItemButton, navigationRow.childNodes[2]);
 
   // Add the base section that will contain the moved aside
   const sidebarSection = document.createElement('section');
@@ -48,11 +75,21 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
     });
   });
 
-  sidebarActiveObserver.observe(characterRecapItem, {
+  sidebarActiveObserver.observe(sidebarItemButton, {
     attributes: true,
     childList: false,
     subtree: false,
   });
+
+  // On render, the click hooks on the items aren't yet registered.
+  // So we cheat a little by forcing the display of the sidebar tab if it was in sheet mode before this render.
+  if (sidebarLocation === 'sheet') {
+    moveSidebarToSheet(parsedHtml);
+    parsedHtml
+      .querySelectorAll('.sheet-content > .tab')
+      .forEach((node) => node.classList.remove('active'));
+    parsedHtml.querySelector('.sidebar-section')?.classList.add('active');
+  }
 });
 
 /**
@@ -66,6 +103,8 @@ function moveSidebarToSheet(parsedHtml: HTMLElement): void {
     return;
   }
   parsedHtml.querySelector('.sidebar-section')?.appendChild(mainPageAside);
+
+  sessionStorage.setItem(`${MODULE_ID}_sidebar_state`, sidebarLocations.sheet);
 }
 
 /**
@@ -84,4 +123,9 @@ function restoreSidebarToMain(parsedHtml: HTMLElement): void {
 
   const mainPageForm = document.querySelector('.window-content > form');
   mainPageForm?.appendChild(sectionAside);
+
+  sessionStorage.setItem(
+    `${MODULE_ID}_sidebar_state`,
+    sidebarLocations.default,
+  );
 }
