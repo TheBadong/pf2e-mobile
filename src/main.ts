@@ -1,3 +1,4 @@
+import { MODULE_ID } from './config';
 import './styles/index.scss';
 
 // CONFIG.debug.hooks = !CONFIG.debug.hooks;
@@ -12,7 +13,7 @@ Hooks.once('init', () => {
 /**
  * Add a new button that displays the sidebar information in a dedicated page
  */
-Hooks.on('renderCharacterSheetPF2e', (app, html, data) => {
+Hooks.on('renderCharacterSheetPF2e', async (app, html, data) => {
   // Add the new button and icon
   const navigationRow = html.get(0)?.querySelector('.sheet-navigation');
   const activeItem = navigationRow?.querySelector('.active');
@@ -22,4 +23,12 @@ Hooks.on('renderCharacterSheetPF2e', (app, html, data) => {
     .querySelector('i')
     ?.classList.replace('fa-address-card', 'fa-bars');
   navigationRow?.insertBefore(characterRecapItem, navigationRow.childNodes[2]);
+
+  // Open new page
+  const foo = await foundry.applications.handlebars.renderTemplate(
+    `modules/${MODULE_ID}/templates/recap-page.hbs`,
+    { world: 'world' },
+  );
+
+  console.debug(foo);
 });
