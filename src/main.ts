@@ -13,9 +13,13 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', (app, html, data) => {
+  // Add the new button and icon
   const navigationRow = html.get(0)?.querySelector('.sheet-navigation');
   const activeItem = navigationRow?.querySelector('.active');
   const characterRecapItem = activeItem?.cloneNode(true) as Element;
   characterRecapItem.classList.remove('active');
+  characterRecapItem
+    .querySelector('i')
+    ?.classList.replace('fa-address-card', 'fa-bars');
   navigationRow?.insertBefore(characterRecapItem, navigationRow.childNodes[2]);
 });
