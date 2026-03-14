@@ -11,6 +11,12 @@ body {
     form.crb-style {
     grid: 'sidebar' 0% 'header' 60px 'nav' min-content 'content';
   }
+
+  .sheet-navigation {
+    .panel-title {
+      display: none;
+    }
+  }
 }
 
 .sidebar-section[data-tab='sidebar'] {
