@@ -1,8 +1,27 @@
 body {
-  background-color: green;
+  background-color: purple;
+}
+
+@media (max-width: 580px) {
+  // Hide the default sidebar in mobile mode
+  // Original : 'sidebar' 35% 'header' 60px 'nav' min-content 'content'
+  .mobile-improvements.system-pf2e
+    .sheet.actor.character
+    .window-content
+    form.crb-style {
+    grid: 'sidebar' 0% 'header' 60px 'nav' min-content 'content';
+  }
 }
 
 .sidebar-section[data-tab='sidebar'] {
+  h2,
+  .hp-small,
+  .armor-class .shield-max-status,
+  .container:not(.current-hp) {
+    --sidebar-title: #181913;
+    --sidebar-label: var(--sidebar-title);
+  }
+
   aside {
     background-image: none !important;
 
