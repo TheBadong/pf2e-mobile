@@ -10,6 +10,27 @@ body {
     .window-content
     form.crb-style {
     grid: 'sidebar' 0% 'header' 60px 'nav' min-content 'content';
+
+    header {
+      padding: 0 8px;
+
+      .char-details {
+        margin: 0;
+      }
+
+      .char-level {
+        .exp-data {
+          .exp-input {
+            display: flex;
+          }
+
+          progress {
+            left: 0;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 
   .sheet-navigation {
