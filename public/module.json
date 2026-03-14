@@ -8,8 +8,7 @@
       "email": "gautier.bardon@gmail.com"
     }
   ],
-  "url": "test url",
-  "license": "GPL-3.0-or-later",
+  "url": "https://github.com/TheBadong/pf2e-mobile",
   "readme": "https://github.com/TheBadong/pf2e-mobile/blob/main/readme.md",
   "version": "v0.1",
   "compatibility": {
@@ -23,7 +22,7 @@
   "socket": true,
   "manifest": "This is auto replaced",
   "download": "This is auto replaced",
-  "bugs": "https://github.com/OmegaRogue/pf2e-mobile-sheet/issues",
+  "bugs": "https://github.com/TheBadong/pf2e-mobile/issues",
   "library": false,
   "relationships": {
     "systems": [
