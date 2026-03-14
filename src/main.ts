@@ -90,6 +90,38 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
       .forEach((node) => node.classList.remove('active'));
     parsedHtml.querySelector('.sidebar-section')?.classList.add('active');
   }
+
+  // Okay so cheat #2
+  // The base render's got some default mecanism that registers the current active tab on render, regardless of the .active class
+  // Because of this, whenever this sheet renders, the "character" tab is always considered "selected",
+  // and if we are in sidebar sheet mode and try to select the "character" tab right after a render,
+  // nothing happens.
+  // So, add a click listener on the character tab if we rendered in sidebar sheet mode, and display as expected
+  // Gosh this sucks
+  if (sidebarLocation === 'sheet') {
+    const characterTabButton = parsedHtml.querySelector(
+      '.sheet-navigation > a[data-tab="character"]',
+    ) as HTMLElement;
+    const listener = (_: MouseEvent) => {
+      console.debug('clicking character button');
+      // Hide sheet sidebar
+      document
+        .querySelector('.sheet-navigation > a[data-tab="sidebar"]')
+        ?.classList.remove('active');
+      document
+        .querySelector('.sheet-content > section[data-tab="sidebar"]')
+        ?.classList.remove('active');
+
+      // Show character tab
+      characterTabButton.classList.add('active');
+      parsedHtml
+        .querySelector('.sheet-content > [data-tab="character"]')
+        ?.classList.add('active');
+      characterTabButton.removeEventListener('click', listener);
+    };
+
+    characterTabButton?.addEventListener('click', listener);
+  }
 });
 
 /**
