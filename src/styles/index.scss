@@ -14,13 +14,18 @@ body {
 }
 
 .sidebar-section[data-tab='sidebar'] {
-  // Text color
+  // Titles and labels text color
   h2,
   .hp-small,
   .armor-class .shield-max-status,
   .container:not(.current-hp) {
     --sidebar-title: #181913;
     --sidebar-label: var(--sidebar-title);
+  }
+
+  // Temp HP input color
+  .hp-big .temp-hp input {
+    color: var(--color-pf-secondary);
   }
 
   // Modifier inputs color
