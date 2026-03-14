@@ -29,8 +29,8 @@ body {
     color: var(--sidebar-label);
   }
 
-  // Fix for invisible dice in the "Hit Points" section
-  .hp-small .d20-svg:not(.disabled) {
+  // roll icons for some reason don't display propeyly
+  .roll-icon:not(.disabled) {
     opacity: 1;
     filter: brightness(0);
   }
