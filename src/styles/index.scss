@@ -14,12 +14,19 @@ body {
 }
 
 .sidebar-section[data-tab='sidebar'] {
+  // Text colot
   h2,
   .hp-small,
   .armor-class .shield-max-status,
   .container:not(.current-hp) {
     --sidebar-title: #181913;
     --sidebar-label: var(--sidebar-title);
+  }
+
+  // Fix for invisible dice in the "Hit Points" section
+  .hp-small .d20-svg:not(.disabled) {
+    opacity: 1;
+    filter: brightness(0);
   }
 
   aside {
