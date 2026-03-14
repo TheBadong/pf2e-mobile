@@ -14,13 +14,18 @@ body {
 }
 
 .sidebar-section[data-tab='sidebar'] {
-  // Text colot
+  // Text color
   h2,
   .hp-small,
   .armor-class .shield-max-status,
   .container:not(.current-hp) {
     --sidebar-title: #181913;
     --sidebar-label: var(--sidebar-title);
+  }
+
+  // hp small pips
+  .hp-small span.pips i {
+    color: var(--sidebar-label);
   }
 
   // Fix for invisible dice in the "Hit Points" section
