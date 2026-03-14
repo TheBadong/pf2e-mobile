@@ -23,7 +23,12 @@ body {
     --sidebar-label: var(--sidebar-title);
   }
 
-  // pips and rest icon
+  // Modifier inputs color
+  a.modifier {
+    color: var(--color-pf-primary);
+  }
+
+  // Pips and rest icons
   .hp-small .condition-pips i,
   .roll-icon.rest i {
     color: var(--sidebar-label);
