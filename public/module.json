@@ -10,7 +10,7 @@
   ],
   "url": "https://github.com/TheBadong/pf2e-mobile",
   "readme": "https://github.com/TheBadong/pf2e-mobile/blob/main/readme.md",
-  "version": "v0.1",
+  "version": "v0.2",
   "compatibility": {
     "minimum": "13",
     "verified": "13"
@@ -20,8 +20,8 @@
   "styles": ["styles/fvttmobile.css"],
   "packs": [],
   "socket": true,
-  "manifest": "https://github.com/TheBadong/pf2e-mobile/releases/download/0.1/module.json",
-  "download": "https://github.com/TheBadong/pf2e-mobile/releases/download/0.1/module.zip",
+  "manifest": "https://github.com/TheBadong/pf2e-mobile/releases/download/0.2/module.json",
+  "download": "https://github.com/TheBadong/pf2e-mobile/releases/download/0.2/module.zip",
   "bugs": "https://github.com/TheBadong/pf2e-mobile/issues",
   "library": false,
   "relationships": {

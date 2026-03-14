@@ -1,5 +1,9 @@
-body {
-  background-color: purple;
+@media (min-width: 581px) {
+  .sheet-navigation {
+    a[data-tab='sidebar'] {
+      display: none;
+    }
+  }
 }
 
 @media (max-width: 580px) {
