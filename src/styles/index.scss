@@ -23,8 +23,9 @@ body {
     --sidebar-label: var(--sidebar-title);
   }
 
-  // hp small pips
-  .hp-small span.pips i {
+  // pips and rest icon
+  .hp-small .condition-pips i,
+  .roll-icon.rest i {
     color: var(--sidebar-label);
   }
 
