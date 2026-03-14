@@ -14,6 +14,18 @@ body {
 }
 
 .sidebar-section[data-tab='sidebar'] {
+  aside {
+    background-image: none !important;
+
+    & > .sidebar {
+      box-shadow: none !important;
+    }
+
+    & > .logo {
+      display: none;
+    }
+  }
+
   // Titles and labels text color
   h2,
   .hp-small,
@@ -43,13 +55,5 @@ body {
   .roll-icon:not(.disabled) {
     opacity: 1;
     filter: brightness(0);
-  }
-
-  aside {
-    background-image: none !important;
-
-    & > .logo {
-      display: none;
-    }
   }
 }
