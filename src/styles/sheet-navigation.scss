@@ -1,0 +1,16 @@
+@media (max-width: 580px) {
+  .sheet-navigation,
+  .sheet-content {
+    vertical-align: top;
+    display: inline-block;
+  }
+
+  .sheet-content {
+    width: 80%;
+    position: relative;
+  }
+
+  nav {
+    width: 19%;
+  }
+}

@@ -1,3 +1,5 @@
+@use './sheet-navigation.scss';
+
 @media (min-width: 581px) {
   .sheet-navigation {
     a[data-tab='sidebar'] {
