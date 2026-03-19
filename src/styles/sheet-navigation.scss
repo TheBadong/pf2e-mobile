@@ -1,4 +1,12 @@
+body {
+  background-color: red;
+}
 @media (max-width: 580px) {
+  .sheet-body {
+    display: flex;
+    flex-direction: row;
+  }
+
   .sheet-navigation,
   .sheet-content {
     vertical-align: top;
@@ -6,11 +14,11 @@
   }
 
   .sheet-content {
-    width: 80%;
+    flex-basis: 0.9;
     position: relative;
   }
 
-  nav {
-    width: 19%;
+  nav.sheet-navigation {
+    flex-basis: 0.1;
   }
 }
