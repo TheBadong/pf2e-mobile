@@ -14,11 +14,11 @@ body {
   }
 
   .sheet-content {
-    flex-basis: 0.9;
+    flex-basis: 90%;
     position: relative;
   }
 
   nav.sheet-navigation {
-    flex-basis: 0.1;
+    flex-grow: 1;
   }
 }
