@@ -34,20 +34,35 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
     );
 
   // Handle drag
-  let dragTimeout: NodeJS.Timeout;
-  dragTimeout = setTimeout(() => {
-    navigationBarState.isBeingDragged = true;
-    console.debug('is being inited');
-  }, 1000);
-  sheetNavigationElement.addEventListener('pointerdown', (e: MouseEvent) => {
-    dragTimeout = setTimeout(() => {
-      navigationBarState.isBeingDragged = true;
-      console.debug('is being dragged');
-    }, 1000);
-  });
 
-  sheetNavigationElement.addEventListener('pointerup', (e: MouseEvent) => {
-    navigationBarState.isBeingDragged = false;
-    clearTimeout(dragTimeout);
-  });
+  sheetNavigationElement.draggable = true;
+  // let dragTimeout: NodeJS.Timeout;
+  // dragTimeout = setTimeout(() => {
+  //   navigationBarState.isBeingDragged = true;
+  //   console.debug('is being inited');
+  // }, 1000);
+  // sheetNavigationElement.addEventListener('pointerdown', (e: PointerEvent) => {
+  //   dragTimeout = setTimeout(() => {
+  //     navigationBarState.isBeingDragged = true;
+  //     console.debug('is being dragged');
+  //   }, 1000);
+  // });
+
+  // sheetNavigationElement.addEventListener('pointermove', (e: PointerEvent) => {
+  //   if (navigationBarState.isBeingDragged) {
+  //     const draggedElement = sheetNavigationElement.cloneNode() as HTMLElement;
+  //     console.debug('draggedElement');
+  //     console.debug('draggine elem to: ', e.x, e.y);
+
+  //     draggedElement.style.position = 'absolute';
+  //     draggedElement.style.zIndex = '100';
+  //     draggedElement.style.left = e.x + 'px';
+  //     draggedElement.style.top = e.y + 'px';
+  //   }
+  // });
+
+  // sheetNavigationElement.addEventListener('pointerup', (e: PointerEvent) => {
+  //   navigationBarState.isBeingDragged = false;
+  //   clearTimeout(dragTimeout);
+  // });
 }
