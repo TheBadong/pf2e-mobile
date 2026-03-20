@@ -11,12 +11,10 @@ const navigationBarState: {
   defaultPosition: 'left';
   position: 'left' | 'right';
   isBeingDragged: boolean;
-  dropTarget: 'left' | 'right' | null;
 } = {
   defaultPosition: 'left',
   position: 'left',
   isBeingDragged: false,
-  dropTarget: null,
 };
 
 export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
@@ -39,7 +37,10 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
 
   sheetBody.insertBefore(sheetNavigationElement, sheetContent);
 
-  // Handle drag
+  // Make navigation draggable
+  sheetNavigationElement.draggable = true;
+
+  // Build drop zones
   const dropZones = document.createElement('div');
   dropZones.style.display = 'none';
   dropZones.style.position = 'absolute';
@@ -52,52 +53,34 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
   dropZoneLeft.style.width = '50vw';
   dropZoneLeft.style.height = '100vh';
   const dropZoneRight = dropZoneLeft.cloneNode() as HTMLElement;
-
-  // Mark sheet body as drag target
-  sheetBody.ondragover = (e) => e.preventDefault();
-  sheetBody.ondrop = (e: DragEvent) => {
-    console.log('dropped on target ', navigationBarState.dropTarget);
-    console.log('target', e.target, e);
-    switch (navigationBarState.dropTarget) {
-      case 'left':
-        if (navigationBarState.position === 'right') {
-          navigationBarState.position = 'left';
-          sheetNavigationElement.style.order = '-1';
-        }
-        break;
-      case 'right':
-        if (navigationBarState.position === 'left') {
-          navigationBarState.position = 'right';
-          sheetNavigationElement.style.order = '1';
-        }
-        break;
-    }
-  };
-
-  dropZoneRight.ondragenter = (e: DragEvent) => {
-    console.debug('Entered right drop zone');
-    navigationBarState.dropTarget = 'right';
-  };
-  dropZoneLeft.ondragenter = (e: DragEvent) => {
-    console.debug('Entered left drop zone');
-    navigationBarState.dropTarget = 'left';
-  };
-
   dropZones.appendChild(dropZoneLeft);
   dropZones.appendChild(dropZoneRight);
 
   sheetContent.appendChild(dropZones);
 
-  sheetNavigationElement.draggable = true;
-  sheetNavigationElement.ondragstart = (e: DragEvent) => {
-    console.debug('drag start!');
+  // Mark sheet body as drag target
+  sheetBody.ondragover = (e) => e.preventDefault();
+
+  // Register the target detection div
+  sheetNavigationElement.ondragstart = () => {
     dropZones.style.display = 'block';
   };
 
-  sheetNavigationElement.ondragend = (e: DragEvent) => {
-    console.debug('drag end!');
+  sheetNavigationElement.ondragend = () => {
     dropZones.style.display = 'none';
   };
-}
 
-function previewDrop(): void {}
+  // Drop target detection
+  dropZoneRight.ondragenter = (e: DragEvent) => {
+    if (navigationBarState.position === 'left') {
+      navigationBarState.position = 'right';
+      sheetNavigationElement.style.order = '1';
+    }
+  };
+  dropZoneLeft.ondragenter = (e: DragEvent) => {
+    if (navigationBarState.position === 'right') {
+      navigationBarState.position = 'left';
+      sheetNavigationElement.style.order = '-1';
+    }
+  };
+}
