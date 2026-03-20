@@ -1,8 +1,8 @@
+/**
+ * Handle vertical navigation bar.
+ * It will be possible to drag the navigation bar to fixed positions : up, right and left
+ */
 export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
-  /**
-   * Make sheet sidebar vertical
-   */
-
   document
     .querySelector('.character.sheet form')
     ?.classList.add('navigation-sides');
