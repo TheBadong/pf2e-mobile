@@ -43,6 +43,8 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
   // Build drop zones
   const dropZones = document.createElement('div');
   dropZones.style.display = 'none';
+  dropZones.style.backgroundColor = 'darkgray';
+  dropZones.style.opacity = '0.8';
   dropZones.style.position = 'absolute';
   dropZones.style.top = '0px';
   dropZones.style.width = '100vw';
