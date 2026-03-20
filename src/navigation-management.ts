@@ -71,13 +71,13 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
   };
 
   // Drop target detection
-  dropZoneRight.ondragenter = (e: DragEvent) => {
+  dropZoneRight.ondragenter = () => {
     if (navigationBarState.position === 'left') {
       navigationBarState.position = 'right';
       sheetNavigationElement.style.order = '1';
     }
   };
-  dropZoneLeft.ondragenter = (e: DragEvent) => {
+  dropZoneLeft.ondragenter = () => {
     if (navigationBarState.position === 'right') {
       navigationBarState.position = 'left';
       sheetNavigationElement.style.order = '-1';
