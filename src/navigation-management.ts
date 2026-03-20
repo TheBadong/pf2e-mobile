@@ -34,8 +34,16 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
     );
 
   // Handle drag
-
   sheetNavigationElement.draggable = true;
+  sheetNavigationElement.ondragstart = (e: DragEvent) => {
+    console.debug('drag start!');
+    // Create drop zones
+  };
+
+  sheetNavigationElement.ondragend = (e: DragEvent) => {
+    console.debug('drag end!');
+    //document.body.removeChild(dropZones);
+  };
   // let dragTimeout: NodeJS.Timeout;
   // dragTimeout = setTimeout(() => {
   //   navigationBarState.isBeingDragged = true;
