@@ -1,4 +1,5 @@
 import { MODULE_ID } from './config';
+import { handleCharacterNavigation } from './navigation-management';
 import { handleMobileSidebar } from './sidebar-mangement';
 import './styles/index.scss';
 
@@ -17,19 +18,5 @@ Hooks.once('init', () => {
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   console.debug('handleMobileSidebar');
   handleMobileSidebar(html);
-  /**
-   * Make sheet sidebar vertical
-   */
-
-  // Move duplciate sidebar (will be completel moved when dev is over)
-  const parsedHtml = html.get(0);
-  const sheetNavigationElement = parsedHtml
-    ?.querySelector('.window-content form.editable')
-    ?.removeChild(
-      html.get(0)?.querySelector('.sheet-navigation') as HTMLElement,
-    );
-
-  parsedHtml
-    ?.querySelector('.sheet-body')
-    ?.appendChild(sheetNavigationElement as HTMLElement);
+  handleCharacterNavigation(html);
 });
