@@ -1,35 +1,22 @@
 body {
-  background-color: blue;
+  background-color: green;
 }
 @media (max-width: 580px) {
-  .character.sheet form.navigation-sides {
-    .sheet-body {
-      display: flex;
-      flex-direction: row;
-    }
+  .character.sheet form {
+    display: flex;
+    flex-direction: column;
 
-    .sheet-navigation,
-    .sheet-content {
-      vertical-align: top;
-      display: inline-block;
-    }
-
-    .sheet-content {
-      flex-basis: 90%;
-      background-image: url('/systems/pf2e/assets/sheet/background.webp');
-      position: relative;
-    }
-
-    nav.sheet-navigation {
+    header.char-header {
       flex-basis: 10%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding-top: 10px;
+    }
+  }
+  .pf2e-mobile-navigation {
+    nav.sheet-navigation {
+      flex-basis: 5%;
+    }
 
-      &.right-side {
-        order: 1;
-      }
+    section.sheet-body {
+      flex-grow: 1;
     }
   }
 }

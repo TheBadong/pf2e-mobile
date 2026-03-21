@@ -9,33 +9,30 @@
  */
 const navigationBarState: {
   defaultPosition: 'left';
-  position: 'left' | 'right';
+  overPosition: 'left' | 'right' | 'top';
+  position: 'left' | 'right' | 'top';
   isBeingDragged: boolean;
 } = {
   defaultPosition: 'left',
+  overPosition: 'left',
   position: 'left',
   isBeingDragged: false,
 };
 
 export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
-  document
-    .querySelector('.character.sheet form')
-    ?.classList.add('navigation-sides');
-
   // Move navigation (will be completely moved when dev is over)
   const parsedHtml = html.get(0) as HTMLElement;
-  const sheetBody = parsedHtml.querySelector('.sheet-body') as HTMLElement;
   const sheetContent = parsedHtml.querySelector(
     '.sheet-content',
   ) as HTMLElement;
+  const sheetForm = parsedHtml?.querySelector(
+    '.window-content form.editable',
+  ) as HTMLElement;
+  const sheetNavigationElement = parsedHtml.querySelector(
+    '.sheet-navigation',
+  ) as HTMLElement;
 
-  const sheetNavigationElement = parsedHtml
-    ?.querySelector('.window-content form.editable')
-    ?.removeChild(
-      html.get(0)?.querySelector('.sheet-navigation') as HTMLElement,
-    ) as HTMLElement;
-
-  sheetBody.insertBefore(sheetNavigationElement, sheetContent);
+  //sheetBody.insertBefore(sheetNavigationElement, sheetContent);
 
   // Make navigation draggable
   sheetNavigationElement.draggable = true;
@@ -53,36 +50,48 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
   const dropZoneLeft = document.createElement('div') as HTMLElement;
   dropZoneLeft.style.display = 'inline-block';
   dropZoneLeft.style.width = '50vw';
-  dropZoneLeft.style.height = '100vh';
+  dropZoneLeft.style.height = '80vh';
   const dropZoneRight = dropZoneLeft.cloneNode() as HTMLElement;
+  const dropZoneTop = document.createElement('div') as HTMLElement;
+  dropZoneTop.style.display = 'inline-block';
+  dropZoneTop.style.width = '100vw';
+  dropZoneTop.style.height = '10vh';
+  dropZones.appendChild(dropZoneTop);
   dropZones.appendChild(dropZoneLeft);
   dropZones.appendChild(dropZoneRight);
 
   sheetContent.appendChild(dropZones);
-
-  // Mark sheet body as drag target
-  sheetBody.ondragover = (e) => e.preventDefault();
 
   // Register the target detection div
   sheetNavigationElement.ondragstart = () => {
     dropZones.style.display = 'block';
   };
 
+  // Stop drag and register the new position
   sheetNavigationElement.ondragend = () => {
     dropZones.style.display = 'none';
+    navigationBarState.position = navigationBarState.overPosition;
   };
 
   // Drop target detection
   dropZoneRight.ondragenter = () => {
-    if (navigationBarState.position === 'left') {
-      navigationBarState.position = 'right';
-      sheetNavigationElement.style.order = '1';
+    if (navigationBarState.position !== 'right') {
+      navigationBarState.overPosition = 'right';
+      sheetForm.classList.add('navigation-sides');
+      sheetNavigationElement.classList.add('navigation-right');
     }
   };
   dropZoneLeft.ondragenter = () => {
-    if (navigationBarState.position === 'right') {
-      navigationBarState.position = 'left';
-      sheetNavigationElement.style.order = '-1';
+    if (navigationBarState.position !== 'left') {
+      navigationBarState.overPosition = 'left';
+      sheetForm.classList.add('navigation-sides');
+      sheetNavigationElement.classList.remove('navigation-right');
+    }
+  };
+  dropZoneTop.ondragenter = () => {
+    if (navigationBarState.position !== 'top') {
+      navigationBarState.overPosition = 'top';
+      sheetForm.classList.remove('navigation-sides');
     }
   };
 }

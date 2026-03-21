@@ -15,9 +15,18 @@
     .sheet.actor.character
     .window-content
     form.crb-style {
-    grid: 'sidebar' 0% 'header' 60px 'nav' min-content 'content';
+    grid: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-    header {
+    aside {
+      display: none;
+    }
+
+    header.char-header {
+      flex-basis: 100%;
+      height: 10%;
       padding: 0 8px;
 
       .char-details {
@@ -37,9 +46,40 @@
         }
       }
     }
+
+    nav.sheet-navigation {
+      flex-basis: 100%;
+      height: 5%;
+    }
+
+    section.sheet-body {
+      flex-basis: 100%;
+      height: 85%;
+    }
+
+    &.navigation-sides {
+      nav.sheet-navigation {
+        flex-basis: 10%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 10px;
+        order: 0;
+
+        &.navigation-right {
+          order: 1;
+        }
+      }
+      .sheet-body {
+        height: 90%;
+        flex-basis: 90%;
+        flex-grow: 1;
+        background-image: url('/systems/pf2e/assets/sheet/background.webp');
+      }
+    }
   }
 
-  .sheet-navigation {
+  nav.sheet-navigation {
     .panel-title {
       display: none;
     }
@@ -49,9 +89,12 @@
 .sidebar-section[data-tab='sidebar'] {
   aside {
     background-image: none !important;
+    height: 100%;
+    display: block !important;
 
     & > .sidebar {
       box-shadow: none !important;
+      height: inherit;
     }
 
     & > .logo {
