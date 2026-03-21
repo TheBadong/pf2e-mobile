@@ -111,10 +111,19 @@
     --sidebar-label: var(--sidebar-title);
   }
 
-  // Temp HP input color
-  .hp-big .temp-hp input {
-    color: var(--color-pf-secondary);
+  .hitpoints {
+    .hp-big {
+      display: flex;
+      & > div {
+        flex-basis: 100%;
+      }
+
+      & .temp-hp input {
+        color: var(--color-pf-secondary);
+      }
+    }
   }
+  // Temp HP input color
 
   // Modifier inputs color
   a.modifier {
