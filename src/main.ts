@@ -1,5 +1,8 @@
 import { MODULE_ID } from './config';
-import { handleCharacterNavigation } from './navigation-management';
+import {
+  handleCharacterNavigation,
+  handleSwipe,
+} from './navigation-management';
 import { handleMobileSidebar } from './sidebar-mangement';
 import './styles/index.scss';
 
@@ -16,7 +19,7 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  console.debug('handleMobileSidebar');
   handleMobileSidebar(html);
   handleCharacterNavigation(html);
+  handleSwipe(html);
 });

@@ -95,3 +95,54 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
     }
   };
 }
+
+export function handleSwipe(html: JQuery<HTMLElement>) {
+  const parsedHtml = html.get(0) as HTMLElement;
+  const sheetBody = parsedHtml.querySelector('.sheet-body') as HTMLElement;
+
+  let pointerState: {
+    pointerDown: boolean;
+    origX: number;
+    origY: number;
+    x: number;
+    y: number;
+  } = {
+    pointerDown: false,
+    origX: 0,
+    origY: 0,
+    x: 0,
+    y: 0,
+  };
+
+  sheetBody.addEventListener('pointerdown', (e) => {
+    pointerState = {
+      pointerDown: true,
+      origX: e.clientX,
+      origY: e.clientY,
+      x: e.clientX,
+      y: e.clientY,
+    };
+  });
+
+  sheetBody.addEventListener('pointermove', (e) => {
+    if (!pointerState.pointerDown) {
+      return;
+    }
+
+    pointerState = {
+      ...pointerState,
+      x: e.clientX,
+      y: e.clientY,
+    };
+
+    console.debug(pointerState.origX, pointerState.x);
+
+    if (pointerState.x - pointerState.origX > 100) {
+      console.debug('swiped 100 pixels!');
+    }
+  });
+
+  sheetBody.addEventListener('pointerup', () => {
+    pointerState.pointerDown = false;
+  });
+}
