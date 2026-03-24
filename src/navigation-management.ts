@@ -25,7 +25,7 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
   const sheetContent = parsedHtml.querySelector(
     '.sheet-content',
   ) as HTMLElement;
-  const sheetForm = parsedHtml?.querySelector(
+  const sheetForm = document.querySelector(
     '.window-content form.editable',
   ) as HTMLElement;
   const sheetNavigationElement = parsedHtml.querySelector(
