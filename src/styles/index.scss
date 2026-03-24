@@ -1,3 +1,5 @@
+@use './sheet-navigation.scss';
+
 @media (min-width: 581px) {
   .sheet-navigation {
     a[data-tab='sidebar'] {
@@ -13,9 +15,18 @@
     .sheet.actor.character
     .window-content
     form.crb-style {
-    grid: 'sidebar' 0% 'header' 60px 'nav' min-content 'content';
+    grid: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-    header {
+    aside {
+      display: none;
+    }
+
+    header.char-header {
+      flex-basis: 100%;
+      height: 10%;
       padding: 0 8px;
 
       .char-details {
@@ -35,9 +46,40 @@
         }
       }
     }
+
+    nav.sheet-navigation {
+      flex-basis: 100%;
+      height: 5%;
+    }
+
+    section.sheet-body {
+      flex-basis: 100%;
+      height: 85%;
+    }
+
+    &.navigation-sides {
+      nav.sheet-navigation {
+        flex-basis: 10%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 10px;
+        order: 0;
+
+        &.navigation-right {
+          order: 1;
+        }
+      }
+      .sheet-body {
+        height: 90%;
+        flex-basis: 90%;
+        flex-grow: 1;
+        background-image: url('/systems/pf2e/assets/sheet/background.webp');
+      }
+    }
   }
 
-  .sheet-navigation {
+  nav.sheet-navigation {
     .panel-title {
       display: none;
     }
@@ -47,9 +89,12 @@
 .sidebar-section[data-tab='sidebar'] {
   aside {
     background-image: none !important;
+    height: 100%;
+    display: block !important;
 
     & > .sidebar {
       box-shadow: none !important;
+      height: inherit;
     }
 
     & > .logo {
@@ -58,28 +103,56 @@
   }
 
   // Titles and labels text color
-  h2,
+  header > h2,
+  .roll-data > h2,
   .hp-small,
-  .armor-class .shield-max-status,
-  .container:not(.current-hp) {
-    --sidebar-title: #181913;
-    --sidebar-label: var(--sidebar-title);
+  .armor-class .shield-max-status .max .sidebar_label,
+  .armor-class .shield-max-status .max .data-value,
+  .armor-class .shield-max-status .status .sidebar_label,
+  .armor-class .shield-max-status .status i,
+  .condition-pips .sidebar_label,
+  .condition-pips .pips i {
+    color: #181913 !important;
   }
 
-  // Temp HP input color
-  .hp-big .temp-hp input {
-    color: var(--color-pf-secondary);
+  .sidebar > header {
+    margin: 8px 0px;
   }
+
+  .hitpoints {
+    .hp-big {
+      display: flex;
+      & > div {
+        flex-basis: 100%;
+      }
+
+      & .temp-hp,
+      .current-hp,
+      .max-hp {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-pf-secondary);
+        margin: 0px;
+        border: 1px solid var(--sidebar-title);
+        border-radius: 0 0 4px 4px;
+        padding: 5px;
+      }
+
+      & input,
+      .data-value h2 {
+        color: var(--text-light);
+      }
+
+      & .max-hp .data-value h2 {
+        color: var(--sidebar-label);
+      }
+    }
+  }
+  // Temp HP input color
 
   // Modifier inputs color
   a.modifier {
     color: var(--color-pf-primary);
-  }
-
-  // Pips and rest icons
-  .hp-small .condition-pips i,
-  .roll-icon.rest i {
-    color: var(--sidebar-label);
   }
 
   // roll icons for some reason don't display propeyly

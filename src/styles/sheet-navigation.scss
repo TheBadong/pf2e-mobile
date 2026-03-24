@@ -1,0 +1,19 @@
+@media (max-width: 580px) {
+  .character.sheet form {
+    display: flex;
+    flex-direction: column;
+
+    header.char-header {
+      flex-basis: 10%;
+    }
+  }
+  .pf2e-mobile-navigation {
+    nav.sheet-navigation {
+      flex-basis: 5%;
+    }
+
+    section.sheet-body {
+      flex-grow: 1;
+    }
+  }
+}
