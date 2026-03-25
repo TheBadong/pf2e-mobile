@@ -70,7 +70,7 @@
       }
 
       section[data-tab='encounter'] {
-        ol.actions-list > li {
+        ol.actions-list.strikes-list > li {
           grid: none;
         }
       }
