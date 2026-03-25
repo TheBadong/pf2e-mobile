@@ -1,5 +1,5 @@
 # Read release version from dist module.json
-VERSION="$(jq -r '.version' module.json)"
+VERSION="$(jq -r '.version' dist/module.json)"
 echo "Preparing release for version $VERSION";
 
 mkdir release
