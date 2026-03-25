@@ -55,6 +55,18 @@
     section.sheet-body {
       flex-basis: 100%;
       height: 85%;
+
+      section[data-tab='character'] {
+        .subsection.attributes {
+          & > ul {
+            grid: none;
+            display: flex;
+            & > li {
+              flex: 1 1 0px;
+            }
+          }
+        }
+      }
     }
 
     &.navigation-sides {
