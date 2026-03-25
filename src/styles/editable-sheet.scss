@@ -1,0 +1,19 @@
+@media (max-width: 580px) {
+  $sidebar-width: 33%;
+  [id*='SheetPF2e']:not(.character) {
+    .sheet-tabs {
+      .sidebar-summary {
+        flex-basis: $sidebar-width;
+      }
+    }
+    section.sidebar {
+      flex-basis: $sidebar-width;
+
+      .form-group {
+        & > select {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
