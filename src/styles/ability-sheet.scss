@@ -1,0 +1,17 @@
+@media (max-width: 580px) {
+  [id^='AbilitySheetPF2e'] {
+    nav.sheet-tabs {
+      .sidebar-summary {
+        display: none;
+      }
+    }
+    .sheet-content {
+      & > section.sidebar {
+        height: fit-content;
+      }
+      & > .sheet-body {
+        flex-basis: 100%;
+      }
+    }
+  }
+}
