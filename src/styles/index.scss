@@ -67,6 +67,12 @@
           }
         }
       }
+
+      section[data-tab='encounter'] {
+        ol.actions-list > li {
+          grid: none;
+        }
+      }
     }
 
     &.navigation-sides {
