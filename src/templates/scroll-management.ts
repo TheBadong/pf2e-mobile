@@ -53,7 +53,7 @@ export function handleScroll(html: JQuery<HTMLElement>) {
       if (!targetTabName) return;
 
       // Show newly selected nav item
-      setActiveTab(targetTabName);
+      //setActiveTab(targetTabName);
 
       // Scroll to the newly selected item
       const targetSection = sheetContent.querySelector(
