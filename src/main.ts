@@ -5,7 +5,7 @@ import {
 } from './navigation-management';
 import { handleMobileSidebar } from './sidebar-mangement';
 import './styles/index.scss';
-import { handleScroll } from './templates/scroll-management';
+import { handleScroll } from './scroll-management';
 import { isMobileMode } from './utils';
 
 // CONFIG.debug.hooks = !CONFIG.debug.hooks;

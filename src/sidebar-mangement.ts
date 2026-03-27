@@ -51,18 +51,18 @@ function moveSidebarToSheet(parsedHtml: HTMLElement): void {
 /**
  * Restore the sidebar to its original location
  */
-function restoreSidebarToMain(parsedHtml: HTMLElement): void {
-  const sectionAside = parsedHtml.querySelector(
-    '.sheet-content > section[data-tab="sidebar"] aside',
-  );
-  if (!sectionAside) {
-    console.warn('Could not remove aside from section content.');
-    return;
-  }
-  parsedHtml
-    .querySelector('.sheet-content > section[data-tab="sidebar"]')
-    ?.removeChild(sectionAside);
+// function restoreSidebarToMain(parsedHtml: HTMLElement): void {
+//   const sectionAside = parsedHtml.querySelector(
+//     '.sheet-content > section[data-tab="sidebar"] aside',
+//   );
+//   if (!sectionAside) {
+//     console.warn('Could not remove aside from section content.');
+//     return;
+//   }
+//   parsedHtml
+//     .querySelector('.sheet-content > section[data-tab="sidebar"]')
+//     ?.removeChild(sectionAside);
 
-  const mainPageForm = document.querySelector('.window-content > form');
-  mainPageForm?.appendChild(sectionAside);
-}
+//   const mainPageForm = document.querySelector('.window-content > form');
+//   mainPageForm?.appendChild(sectionAside);
+// }
