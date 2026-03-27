@@ -22,13 +22,6 @@ export function handleMobileSidebar(html: JQuery<HTMLElement>) {
   sidebarItemButton.setAttribute('data-tab', 'sidebar');
   sidebarItemButton.role = 'tab';
   sidebarItemButton.classList.add('item');
-  // If the current sidebar state is 'sheet', set the sidebar tab as active
-  if (sidebarLocation === 'sheet') {
-    parsedHtml.querySelectorAll('.sheet-navigation > .item').forEach((node) => {
-      node.classList.remove('active');
-    });
-    sidebarItemButton.classList.add('active');
-  }
 
   // Button icon
   const sidebarItemIcon = document.createElement('i');
@@ -131,7 +124,8 @@ function restoreSidebarToMain(parsedHtml: HTMLElement): void {
     '.sheet-content > section[data-tab="sidebar"] aside',
   );
   if (!sectionAside) {
-    throw new Error('Could not remove aside from section content.');
+    console.warn('Could not remove aside from section content.');
+    return;
   }
   parsedHtml
     .querySelector('.sheet-content > section[data-tab="sidebar"]')

@@ -34,11 +34,17 @@ export function handleScroll(html: JQuery<HTMLElement>) {
     (e) => {
       e.stopPropagation();
       console.debug('clicked');
-      const targetTabName = (e.target as HTMLElement)
-        ?.closest('a.item')
-        ?.getAttribute('data-tab');
-      if (!targetTabName) return;
+      const clickedNavItem = (e.target as HTMLElement)?.closest('a.item');
 
+      // Show newly selected nav item
+      sheetNavigation.querySelectorAll('a.item').forEach((navItem) => {
+        (navItem as HTMLElement).classList.remove('active');
+      });
+      clickedNavItem?.classList.add('active');
+
+      // Scroll to the newly selected item
+      const targetTabName = clickedNavItem?.getAttribute('data-tab');
+      if (!targetTabName) return;
       const targetSection = sheetContent.querySelector(
         `[data-tab="${targetTabName}"]`,
       ) as HTMLElement | null;
