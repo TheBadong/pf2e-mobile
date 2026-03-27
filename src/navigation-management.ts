@@ -32,8 +32,6 @@ export function handleCharacterNavigation(html: JQuery<HTMLElement>) {
     '.sheet-navigation',
   ) as HTMLElement;
 
-  //sheetBody.insertBefore(sheetNavigationElement, sheetContent);
-
   // Make navigation draggable
   sheetNavigationElement.draggable = true;
 

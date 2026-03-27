@@ -106,6 +106,12 @@ function resolveVisibleSection(
   parsedHtml: HTMLElement,
   scrollValue: number,
 ): HTMLElement | null {
+  /**
+   * For SOME REASON even though the scroll instruction is an int,
+   * the resolved value in the event is a float, very close to the target value.
+   * So round it to resolve the correct section.
+   */
+  scrollValue = Math.round(scrollValue);
   const sections = getSections(parsedHtml);
 
   if (scrollValue < sections.character.offsetTop) {
