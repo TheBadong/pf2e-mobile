@@ -1,6 +1,8 @@
 @use './sheet-navigation.scss';
 @use './editable-sheet.scss';
-
+body {
+  background-color: rebeccapurple;
+}
 @media (min-width: 581px) {
   .sheet-navigation {
     a[data-tab='sidebar'] {
@@ -108,9 +110,11 @@
   .sheet-content {
     height: 100%;
     overflow: auto;
+    display: block;
 
     & > section,
     & > div {
+      height: fit-content;
       min-height: 100%;
       position: relative;
       display: flex;
