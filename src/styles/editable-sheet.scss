@@ -1,4 +1,4 @@
-@media (max-width: 580px) {
+body > [id^='CharacterSheetPF2e-Actor'].mobile-character-sheet {
   $sidebar-width: 33%;
   [id*='SheetPF2e']:not(.character) {
     .sheet-tabs {

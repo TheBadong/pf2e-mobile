@@ -19,7 +19,53 @@ export function handleMobileSidebar(html: JQuery<HTMLElement>) {
   const navigationRow = parsedHtml?.querySelector('.sheet-navigation');
   navigationRow?.insertBefore(sidebarItemButton, navigationRow.childNodes[2]);
 
-  // Add the base section that will contain the moved aside
+  buildSidebarSection(parsedHtml);
+
+  moveSidebarToSheet(parsedHtml);
+}
+
+/**
+ * Remove the original sidebar and move it to the sheet content sections
+ */
+export function moveSidebarToSheet(parsedHtml: HTMLElement): void {
+  const mainPageForm = document.querySelector('.window-content > form');
+  const mainPageAside = mainPageForm?.querySelector('aside');
+
+  if (!mainPageAside) {
+    console.error('Error parsing DOM! Mobile mode will not function properly.');
+    return;
+  }
+
+  const sidebarSection =
+    parsedHtml.querySelector('.sidebar-section') ??
+    buildSidebarSection(parsedHtml);
+
+  sidebarSection.appendChild(mainPageAside);
+}
+
+/**
+ * Restore the sidebar to its original location
+ */
+export function restoreSidebarToMain(parsedHtml: HTMLElement): void {
+  const sectionAside = parsedHtml.querySelector(
+    '.sheet-content > section[data-tab="sidebar"] aside',
+  );
+  if (!sectionAside) {
+    console.warn('Could not remove aside from section content.');
+    return;
+  }
+  parsedHtml
+    .querySelector('.sheet-content > section[data-tab="sidebar"]')
+    ?.removeChild(sectionAside);
+
+  const mainPageForm = document.querySelector('.window-content > form');
+  mainPageForm?.appendChild(sectionAside);
+}
+
+/**
+ * Add the base section that will contain the moved aside
+ */
+function buildSidebarSection(parsedHtml: HTMLElement): HTMLElement {
   const sidebarSection = document.createElement('section');
   sidebarSection.classList.add('tab', 'sidebar-section', 'major');
   sidebarSection.setAttribute('data-group', 'primary');
@@ -31,38 +77,5 @@ export function handleMobileSidebar(html: JQuery<HTMLElement>) {
     .querySelector('.sheet-content')
     ?.insertBefore(sidebarSection, characterSection);
 
-  moveSidebarToSheet(parsedHtml);
+  return sidebarSection;
 }
-
-/**
- * Remove the original sidebar and move it to the sheet content sections
- */
-function moveSidebarToSheet(parsedHtml: HTMLElement): void {
-  const mainPageForm = document.querySelector('.window-content > form');
-  const mainPageAside = mainPageForm?.querySelector('aside');
-
-  if (!mainPageAside) {
-    console.error('Error parsing DOM! Mobile mode will not function properly.');
-    return;
-  }
-  parsedHtml.querySelector('.sidebar-section')?.appendChild(mainPageAside);
-}
-
-/**
- * Restore the sidebar to its original location
- */
-// function restoreSidebarToMain(parsedHtml: HTMLElement): void {
-//   const sectionAside = parsedHtml.querySelector(
-//     '.sheet-content > section[data-tab="sidebar"] aside',
-//   );
-//   if (!sectionAside) {
-//     console.warn('Could not remove aside from section content.');
-//     return;
-//   }
-//   parsedHtml
-//     .querySelector('.sheet-content > section[data-tab="sidebar"]')
-//     ?.removeChild(sectionAside);
-
-//   const mainPageForm = document.querySelector('.window-content > form');
-//   mainPageForm?.appendChild(sectionAside);
-// }

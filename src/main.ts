@@ -3,13 +3,16 @@ import {
   handleCharacterNavigation,
   handleSwipe,
 } from './navigation-management';
-import { handleMobileSidebar } from './sidebar-mangement';
+import {
+  handleMobileSidebar,
+  moveSidebarToSheet,
+  restoreSidebarToMain,
+} from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll } from './scroll-management';
-import { isMobileMode } from './utils';
+import { isMobileSize, MAX_MOBILE_SCREEN_WIDTH } from './utils';
 
-// CONFIG.debug.hooks = !CONFIG.debug.hooks;
-// console.warn('Set Hook Debugging to', CONFIG.debug.hooks);
+let mobileMode = false;
 
 Hooks.once('init', () => {
   console.debug('pf2e mobile startss');
@@ -21,11 +24,39 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  if (!isMobileMode()) {
+  const parsedHtml = html.get(0) as HTMLElement;
+  console.debug(parsedHtml);
+
+  new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.target.id.startsWith('CharacterSheet')) {
+        console.debug('WHAT');
+        return;
+      }
+
+      console.debug('OBSERVING', mobileMode, isMobileSize(parsedHtml));
+      if (!mobileMode && isMobileSize(parsedHtml)) {
+        console.debug('setting mobile mode', mobileMode);
+        mobileMode = true;
+        handleMobileSidebar(html);
+        handleCharacterNavigation(html);
+        handleSwipe(html);
+        handleScroll(html);
+        parsedHtml.classList.add('mobile-character-sheet');
+        return;
+      }
+
+      if (mobileMode && !isMobileSize(parsedHtml)) {
+        //TODO: revert all mobile changes
+        console.debug('removing mobile mode', mobileMode);
+        mobileMode = false;
+        restoreSidebarToMain(parsedHtml);
+        parsedHtml.classList.remove('mobile-character-sheet');
+        return;
+      }
+    });
+  }).observe(parsedHtml);
+  if (!isMobileSize(parsedHtml)) {
     return;
   }
-  handleMobileSidebar(html);
-  handleCharacterNavigation(html);
-  handleSwipe(html);
-  handleScroll(html);
 });

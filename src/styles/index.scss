@@ -1,6 +1,9 @@
 @use './sheet-navigation.scss';
 @use './editable-sheet.scss';
 
+body {
+  background-color: rebeccapurple;
+}
 @media (min-width: 581px) {
   .sheet-navigation {
     a[data-tab='sidebar'] {
@@ -9,13 +12,9 @@
   }
 }
 
-@media (max-width: 580px) {
+body div.mobile-character-sheet {
   // Hide the default sidebar in mobile mode
-  // Original : 'sidebar' 35% 'header' 60px 'nav' min-content 'content'
-  .mobile-improvements.system-pf2e
-    .sheet.actor.character
-    .window-content
-    form.crb-style {
+  .window-content form.crb-style {
     grid: none;
     display: flex;
     flex-direction: row;
@@ -119,80 +118,79 @@
       flex-direction: column;
     }
   }
-}
+  .sidebar-section[data-tab='sidebar'] {
+    aside {
+      background-image: none !important;
+      height: 100%;
+      display: block !important;
 
-.sidebar-section[data-tab='sidebar'] {
-  aside {
-    background-image: none !important;
-    height: 100%;
-    display: block !important;
-
-    & > .sidebar {
-      box-shadow: none !important;
-      height: inherit;
-    }
-
-    & > .logo {
-      display: none;
-    }
-  }
-
-  // Titles and labels text color
-  header > h2,
-  .roll-data > h2,
-  .hp-small,
-  .armor-class .shield-max-status .max .sidebar_label,
-  .armor-class .shield-max-status .max .data-value,
-  .armor-class .shield-max-status .status .sidebar_label,
-  .armor-class .shield-max-status .status i,
-  .condition-pips .sidebar_label,
-  .condition-pips .pips i {
-    color: #181913 !important;
-  }
-
-  .sidebar > header {
-    margin: 8px 0px;
-  }
-
-  .hitpoints {
-    .hp-big {
-      display: flex;
-      & > div {
-        flex-basis: 100%;
+      & > .sidebar {
+        box-shadow: none !important;
+        height: inherit;
       }
 
-      & .temp-hp,
-      .current-hp,
-      .max-hp {
+      & > .logo {
+        display: none;
+      }
+    }
+
+    // Titles and labels text color
+    header > h2,
+    .roll-data > h2,
+    .hp-small,
+    .armor-class .shield-max-status .max .sidebar_label,
+    .armor-class .shield-max-status .max .data-value,
+    .armor-class .shield-max-status .status .sidebar_label,
+    .armor-class .shield-max-status .status i,
+    .condition-pips .sidebar_label,
+    .condition-pips .pips i {
+      color: #181913 !important;
+    }
+
+    .sidebar > header {
+      margin: 8px 0px;
+    }
+
+    .hitpoints {
+      .hp-big {
         display: flex;
-        flex-direction: column;
-        background-color: var(--color-pf-secondary);
-        margin: 0px;
-        border: 1px solid var(--sidebar-title);
-        border-radius: 0 0 4px 4px;
-        padding: 5px;
-      }
+        & > div {
+          flex-basis: 100%;
+        }
 
-      & input,
-      .data-value h2 {
-        color: var(--text-light);
-      }
+        & .temp-hp,
+        .current-hp,
+        .max-hp {
+          display: flex;
+          flex-direction: column;
+          background-color: var(--color-pf-secondary);
+          margin: 0px;
+          border: 1px solid var(--sidebar-title);
+          border-radius: 0 0 4px 4px;
+          padding: 5px;
+        }
 
-      & .max-hp .data-value h2 {
-        color: var(--sidebar-label);
+        & input,
+        .data-value h2 {
+          color: var(--text-light);
+        }
+
+        & .max-hp .data-value h2 {
+          color: var(--sidebar-label);
+        }
       }
     }
-  }
-  // Temp HP input color
+    // Temp HP input color
 
-  // Modifier inputs color
-  a.modifier {
-    color: var(--color-pf-primary);
-  }
+    // Modifier inputs color
+    a.modifier {
+      color: var(--color-pf-primary);
+    }
 
-  // roll icons for some reason don't display propeyly
-  .roll-icon:not(.disabled) {
-    opacity: 1;
-    filter: brightness(0);
+    // roll icons for some reason don't display propeyly
+    .roll-icon:not(.disabled) {
+      opacity: 1;
+      filter: brightness(0);
+    }
   }
 }
