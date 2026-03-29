@@ -3,14 +3,10 @@ import {
   handleCharacterNavigation,
   handleSwipe,
 } from './navigation-management';
-import {
-  handleMobileSidebar,
-  moveSidebarToSheet,
-  restoreSidebarToMain,
-} from './sidebar-mangement';
+import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
-import { isMobileSize, MAX_MOBILE_SCREEN_WIDTH } from './utils';
+import { isMobileSize } from './utils';
 
 let mobileMode = false;
 
