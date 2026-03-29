@@ -5,11 +5,6 @@ body {
   background-color: rebeccapurple;
 }
 @media (min-width: 581px) {
-  .sheet-navigation {
-    a[data-tab='sidebar'] {
-      display: none;
-    }
-  }
 }
 
 body div.mobile-character-sheet {
@@ -98,6 +93,10 @@ body div.mobile-character-sheet {
   }
 
   nav.sheet-navigation {
+    a[data-tab='sidebar'] {
+      display: flex;
+    }
+
     .panel-title {
       display: none;
     }
@@ -192,5 +191,16 @@ body div.mobile-character-sheet {
       opacity: 1;
       filter: brightness(0);
     }
+  }
+}
+
+body div:not(.mobile-character-sheet) {
+  .sheet-navigation {
+    a[data-tab='sidebar'] {
+      display: none;
+    }
+  }
+  .sidebar-section {
+    display: none;
   }
 }

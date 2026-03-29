@@ -9,7 +9,7 @@ import {
   restoreSidebarToMain,
 } from './sidebar-mangement';
 import './styles/index.scss';
-import { handleScroll } from './scroll-management';
+import { handleScroll, restoreDefaultActive } from './scroll-management';
 import { isMobileSize, MAX_MOBILE_SCREEN_WIDTH } from './utils';
 
 let mobileMode = false;
@@ -34,7 +34,6 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
         return;
       }
 
-      console.debug('OBSERVING', mobileMode, isMobileSize(parsedHtml));
       if (!mobileMode && isMobileSize(parsedHtml)) {
         console.debug('setting mobile mode', mobileMode);
         mobileMode = true;
@@ -51,11 +50,13 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
         console.debug('removing mobile mode', mobileMode);
         mobileMode = false;
         restoreSidebarToMain(parsedHtml);
+        restoreDefaultActive(parsedHtml);
         parsedHtml.classList.remove('mobile-character-sheet');
         return;
       }
     });
   }).observe(parsedHtml);
+
   if (!isMobileSize(parsedHtml)) {
     return;
   }

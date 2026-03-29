@@ -17,10 +17,7 @@ export function handleScroll(html: JQuery<HTMLElement>) {
     '.sheet-navigation',
   ) as HTMLElement;
 
-  // Add active on all elements (probably a bad idea)
-  for (const child of sheetContent.children) {
-    child.classList.add('active');
-  }
+  makeAllSectionsActive(parsedHtml);
 
   // Register scroll for isntant scroll back on reload
   // Refactor this sometime
@@ -147,4 +144,29 @@ function getSectionByName(
   name: SectionTab,
 ): HTMLElement | null {
   return parsedHtml.querySelector(`.tab[data-tab="${name}"]`);
+}
+
+/**
+ * add the "active" class to alll the sheet' sections
+ */
+export function makeAllSectionsActive(parsedHtml: HTMLElement): void {
+  for (const child of parsedHtml.querySelector('.sheet-content')?.children ??
+    []) {
+    child.classList.add('active');
+  }
+}
+
+/**
+ * Remove the "active" class from all tje sheet' sections and make only the default tab active
+ * TODO (later): make active the tab that was active in the opposite state
+ */
+export function restoreDefaultActive(parsedHtml: HTMLElement): void {
+  for (const child of parsedHtml.querySelector('.sheet-content')?.children ??
+    []) {
+    child.classList.remove('active');
+  }
+
+  parsedHtml
+    .querySelector('.sheet-content .tab.character.major')
+    ?.classList.add('active');
 }

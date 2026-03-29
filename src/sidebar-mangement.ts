@@ -4,23 +4,8 @@ export function handleMobileSidebar(html: JQuery<HTMLElement>) {
     throw new Error('Could not get character sheet render even html.');
   }
 
-  // Build the new button
-  const sidebarItemButton = document.createElement('a');
-  sidebarItemButton.setAttribute('data-tab', 'sidebar');
-  sidebarItemButton.role = 'tab';
-  sidebarItemButton.classList.add('item');
-
-  // Button icon
-  const sidebarItemIcon = document.createElement('i');
-  sidebarItemIcon.classList.add('fa-solid', 'fa-bars');
-  sidebarItemButton.appendChild(sidebarItemIcon);
-
-  // Append the new button to the navigation row
-  const navigationRow = parsedHtml?.querySelector('.sheet-navigation');
-  navigationRow?.insertBefore(sidebarItemButton, navigationRow.childNodes[2]);
-
+  buildSidebarNavButton(parsedHtml);
   buildSidebarSection(parsedHtml);
-
   moveSidebarToSheet(parsedHtml);
 }
 
@@ -36,9 +21,7 @@ export function moveSidebarToSheet(parsedHtml: HTMLElement): void {
     return;
   }
 
-  const sidebarSection =
-    parsedHtml.querySelector('.sidebar-section') ??
-    buildSidebarSection(parsedHtml);
+  const sidebarSection = buildSidebarSection(parsedHtml);
 
   sidebarSection.appendChild(mainPageAside);
 }
@@ -63,10 +46,45 @@ export function restoreSidebarToMain(parsedHtml: HTMLElement): void {
 }
 
 /**
- * Add the base section that will contain the moved aside
+ * If it does not already exist, add the nav button that targets the moved aside
+ */
+function buildSidebarNavButton(parsedHtml: HTMLElement): HTMLElement {
+  // Prevent building twice
+  let sidebarItemButton = document.querySelector(
+    '.sheet-navigation > a[data-tab="sidebar"]',
+  ) as HTMLElement | null;
+  if (sidebarItemButton) {
+    return sidebarItemButton;
+  }
+
+  // Build button
+  sidebarItemButton = document.createElement('a');
+  sidebarItemButton.setAttribute('data-tab', 'sidebar');
+  sidebarItemButton.role = 'tab';
+  sidebarItemButton.classList.add('item');
+
+  // Button icon
+  const sidebarItemIcon = document.createElement('i');
+  sidebarItemIcon.classList.add('fa-solid', 'fa-bars');
+  sidebarItemButton.appendChild(sidebarItemIcon);
+
+  // Append the new button to the navigation row
+  const navigationRow = parsedHtml?.querySelector('.sheet-navigation');
+  navigationRow?.insertBefore(sidebarItemButton, navigationRow.childNodes[2]);
+
+  return sidebarItemButton;
+}
+
+/**
+ * If it does not already exist, add the base section that will contain the moved aside
  */
 function buildSidebarSection(parsedHtml: HTMLElement): HTMLElement {
-  const sidebarSection = document.createElement('section');
+  let sidebarSection = parsedHtml.querySelector(
+    '.sidebar-section',
+  ) as HTMLElement | null;
+  if (sidebarSection) return sidebarSection;
+
+  sidebarSection = document.createElement('section');
   sidebarSection.classList.add('tab', 'sidebar-section', 'major');
   sidebarSection.setAttribute('data-group', 'primary');
   sidebarSection.setAttribute('data-tab', 'sidebar');
