@@ -1,14 +1,9 @@
-import {
-  handleCharacterNavigation,
-  handleSwipe,
-} from './navigation-management';
+import { handleCharacterNavigation } from './navigation-management';
 import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
-import { isMobileSize } from './utils';
+import { isMobileScreen, isMobileSize } from './utils';
 import { mobileSheets } from './sheets';
-
-let mobileMode = false;
 
 Hooks.once('init', () => {
   console.debug('pf2e mobile starts');
@@ -19,53 +14,66 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  const parsedHtml = html.get(0) as HTMLElement;
+  const characterSheet = html.get(0) as HTMLElement;
+  const characterSheetId = characterSheet.id;
 
-  console.debug('Registering Mobile Sheet ', parsedHtml.id);
-  mobileSheets.set(parsedHtml.id, {});
+  console.debug('Registering Mobile Sheet ', characterSheetId);
+
+  mobileSheets.set(characterSheetId, { mobileViewEnabled: false });
+
+  if (isMobileScreen()) {
+    mobileSheets.set(characterSheetId, { mobileViewEnabled: true });
+    enableMobileView(characterSheet);
+  }
 
   new ResizeObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.target.id.startsWith('CharacterSheet')) {
+      const target = entry.target as HTMLElement;
+      const targetId = entry.target.id;
+      if (!targetId.startsWith('CharacterSheet')) {
         return;
       }
 
-      if (!mobileMode && isMobileSize(parsedHtml)) {
-        mobileMode = true;
-        handleMobileSidebar(html);
-        handleCharacterNavigation(html);
-        handleSwipe(html);
-        handleScroll(html);
-        parsedHtml.classList.add('mobile-character-sheet');
+      const mobileSheet = mobileSheets.get(targetId);
+      if (!mobileSheet) return;
+
+      if (!mobileSheet.mobileViewEnabled && isMobileSize(target)) {
+        mobileSheet.mobileViewEnabled = true;
+        enableMobileView(target);
         return;
       }
 
-      if (mobileMode && !isMobileSize(parsedHtml)) {
-        //TODO: revert all mobile changes
-        mobileMode = false;
-        restoreSidebarToMain(parsedHtml);
-        restoreDefaultActive(parsedHtml);
-        // Remove navbarlistener
-        const mobileSheet = mobileSheets.get(entry.target.id);
-        if (mobileSheet) {
-          console.debug('removing listener');
-          parsedHtml
-            .querySelector('nav.sheet-navigation')
-            ?.removeEventListener(
-              'click',
-              mobileSheet?.navbarListener as EventListener,
-              { capture: true },
-            );
-          mobileSheet.navbarListener = undefined;
-        }
-
-        parsedHtml.classList.remove('mobile-character-sheet');
+      if (mobileSheet.mobileViewEnabled && !isMobileSize(target)) {
+        mobileSheet.mobileViewEnabled = false;
+        deactivateMobileView(characterSheet);
         return;
       }
     });
-  }).observe(parsedHtml);
-
-  if (!isMobileSize(parsedHtml)) {
-    return;
-  }
+  }).observe(characterSheet);
 });
+
+function enableMobileView(characterSheet: HTMLElement): void {
+  handleMobileSidebar(characterSheet);
+  handleCharacterNavigation(characterSheet);
+  handleScroll(characterSheet);
+  characterSheet.classList.add('mobile-character-sheet');
+}
+
+function deactivateMobileView(characterSheet: HTMLElement): void {
+  restoreSidebarToMain(characterSheet);
+  restoreDefaultActive(characterSheet);
+  // Remove navbarlistener
+  const mobileSheet = mobileSheets.get(characterSheet.id);
+  if (mobileSheet) {
+    characterSheet
+      .querySelector('nav.sheet-navigation')
+      ?.removeEventListener(
+        'click',
+        mobileSheet?.navbarListener as EventListener,
+        { capture: true },
+      );
+    mobileSheet.navbarListener = undefined;
+  }
+
+  characterSheet.classList.remove('mobile-character-sheet');
+}

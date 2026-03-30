@@ -1,12 +1,7 @@
-export function handleMobileSidebar(html: JQuery<HTMLElement>) {
-  const parsedHtml = html.get(0);
-  if (!parsedHtml) {
-    throw new Error('Could not get character sheet render even html.');
-  }
-
-  buildSidebarNavButton(parsedHtml);
-  buildSidebarSection(parsedHtml);
-  moveSidebarToSheet(parsedHtml);
+export function handleMobileSidebar(characterSheet: HTMLElement) {
+  buildSidebarNavButton(characterSheet);
+  buildSidebarSection(characterSheet);
+  moveSidebarToSheet(characterSheet);
 }
 
 /**

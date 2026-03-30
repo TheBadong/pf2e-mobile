@@ -5,3 +5,7 @@ export function isMobileSize(sheetHtml: HTMLElement): boolean {
 
   return sheetWidth ? sheetWidth < MAX_MOBILE_SCREEN_WIDTH : false;
 }
+
+export function isMobileScreen(): boolean {
+  return window.screen.width < MAX_MOBILE_SCREEN_WIDTH;
+}

@@ -1,6 +1,7 @@
 type CharacterSheetId = string;
 
 type MobileSheet = {
+  mobileViewEnabled: boolean;
   navbarListener?: EventListener;
 };
 
