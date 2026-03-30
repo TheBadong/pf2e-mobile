@@ -1,3 +1,5 @@
+import { mobileSheets } from './sheets';
+
 /** Saved scroll positiion */
 let registeredScroll = 0;
 /**
@@ -7,6 +9,14 @@ export function handleScroll(html: JQuery<HTMLElement>) {
   const parsedHtml = html.get(0);
   if (!parsedHtml) {
     throw new Error('Could not get character sheet render even html.');
+  }
+
+  const mobileSheet = mobileSheets.get(parsedHtml.id);
+  if (!mobileSheet) {
+    console.error(
+      'Sheet not registered for mobile use! Skipping scroll process.',
+    );
+    return;
   }
 
   const sheetContent = parsedHtml.querySelector(
@@ -37,9 +47,9 @@ export function handleScroll(html: JQuery<HTMLElement>) {
     ) as SectionTab,
   );
 
-  sheetNavigation.addEventListener(
-    'click',
-    (e) => {
+  // Register scroll listener if it does not already exist
+  if (!mobileSheet.navbarListener) {
+    mobileSheet.navbarListener = (e) => {
       // Prevent all other click events on the navbar
       e.stopPropagation();
 
@@ -66,9 +76,12 @@ export function handleScroll(html: JQuery<HTMLElement>) {
         left: 0,
         behavior: 'instant',
       });
-    },
-    { capture: true },
-  );
+    };
+  }
+
+  sheetNavigation.addEventListener('click', mobileSheet.navbarListener, {
+    capture: true,
+  });
 }
 
 function setActiveTab(tabName: SectionTab): void {

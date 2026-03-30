@@ -6,11 +6,13 @@ import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
 import { isMobileSize } from './utils';
+import { mobileSheets } from './sheets';
 
 let mobileMode = false;
 
 Hooks.once('init', () => {
   console.debug('pf2e mobile starts');
+  console.debug('Initiating MobileSheets');
 });
 
 /**
@@ -18,7 +20,9 @@ Hooks.once('init', () => {
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   const parsedHtml = html.get(0) as HTMLElement;
-  console.debug(parsedHtml);
+
+  console.debug('Registering Mobile Sheet ', parsedHtml.id);
+  mobileSheets.set(parsedHtml.id, {});
 
   new ResizeObserver((entries) => {
     entries.forEach((entry) => {
@@ -41,6 +45,20 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
         mobileMode = false;
         restoreSidebarToMain(parsedHtml);
         restoreDefaultActive(parsedHtml);
+        // Remove navbarlistener
+        const mobileSheet = mobileSheets.get(entry.target.id);
+        if (mobileSheet) {
+          console.debug('removing listener');
+          parsedHtml
+            .querySelector('nav.sheet-navigation')
+            ?.removeEventListener(
+              'click',
+              mobileSheet?.navbarListener as EventListener,
+              { capture: true },
+            );
+          mobileSheet.navbarListener = undefined;
+        }
+
         parsedHtml.classList.remove('mobile-character-sheet');
         return;
       }
