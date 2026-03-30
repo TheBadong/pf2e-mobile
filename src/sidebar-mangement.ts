@@ -8,17 +8,17 @@ export function handleMobileSidebar(characterSheet: HTMLElement) {
  * Remove the original sidebar and move it to the sheet content sections
  */
 export function moveSidebarToSheet(characterSheet: HTMLElement): void {
-  const mainPageForm = document.querySelector('.window-content > form');
-  const mainPageAside = mainPageForm?.querySelector('aside');
+  const sheetForm = characterSheet.querySelector('.window-content > form');
+  const sheetAside = sheetForm?.querySelector('aside');
 
-  if (!mainPageAside) {
+  if (!sheetAside) {
     console.error('Error parsing DOM! Mobile mode will not function properly.');
     return;
   }
 
   const sidebarSection = buildSidebarSection(characterSheet);
 
-  sidebarSection.appendChild(mainPageAside);
+  sidebarSection.appendChild(sheetAside);
 }
 
 /**
@@ -36,7 +36,7 @@ export function restoreSidebarToMain(characterSheet: HTMLElement): void {
     .querySelector('.sheet-content > section[data-tab="sidebar"]')
     ?.removeChild(sectionAside);
 
-  const mainPageForm = document.querySelector('.window-content > form');
+  const mainPageForm = characterSheet.querySelector('.window-content > form');
   mainPageForm?.appendChild(sectionAside);
 }
 
@@ -45,7 +45,7 @@ export function restoreSidebarToMain(characterSheet: HTMLElement): void {
  */
 function buildSidebarNavButton(characterSheet: HTMLElement): HTMLElement {
   // Prevent building twice
-  let sidebarItemButton = document.querySelector(
+  let sidebarItemButton = characterSheet.querySelector(
     '.sheet-navigation > a[data-tab="sidebar"]',
   ) as HTMLElement | null;
   if (sidebarItemButton) {
