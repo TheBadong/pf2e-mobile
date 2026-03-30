@@ -32,7 +32,10 @@ export function handleScroll(characterSheet: HTMLElement) {
       characterSheet,
       registeredScroll,
     );
-    setActiveTab(visibleSection?.getAttribute('data-tab') as SectionTab);
+    setActiveTab(
+      characterSheet,
+      visibleSection?.getAttribute('data-tab') as SectionTab,
+    );
   };
 
   // Instantly scroll to the last registered scroll position
@@ -40,6 +43,7 @@ export function handleScroll(characterSheet: HTMLElement) {
 
   // Set active item on render
   setActiveTab(
+    characterSheet,
     resolveVisibleSection(characterSheet, registeredScroll)?.getAttribute(
       'data-tab',
     ) as SectionTab,
@@ -82,11 +86,11 @@ export function handleScroll(characterSheet: HTMLElement) {
   });
 }
 
-function setActiveTab(tabName: SectionTab): void {
-  document.querySelectorAll('a.item').forEach((navItem) => {
+function setActiveTab(characterSheet: HTMLElement, tabName: SectionTab): void {
+  characterSheet.querySelectorAll('a.item').forEach((navItem) => {
     (navItem as HTMLElement).classList.remove('active');
   });
-  document
+  characterSheet
     .querySelector(`a.item[data-tab="${tabName}"]`)
     ?.classList.add('active');
 }
