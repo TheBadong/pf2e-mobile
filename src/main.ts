@@ -1,4 +1,3 @@
-import { MODULE_ID } from './config';
 import {
   handleCharacterNavigation,
   handleSwipe,
@@ -11,9 +10,7 @@ import { isMobileSize } from './utils';
 let mobileMode = false;
 
 Hooks.once('init', () => {
-  console.debug('pf2e mobile startss');
-  // Reset session
-  sessionStorage.removeItem(`${MODULE_ID}_sidebar_state`);
+  console.debug('pf2e mobile starts');
 });
 
 /**
@@ -26,12 +23,10 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   new ResizeObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.target.id.startsWith('CharacterSheet')) {
-        console.debug('WHAT');
         return;
       }
 
       if (!mobileMode && isMobileSize(parsedHtml)) {
-        console.debug('setting mobile mode', mobileMode);
         mobileMode = true;
         handleMobileSidebar(html);
         handleCharacterNavigation(html);
@@ -43,7 +38,6 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
       if (mobileMode && !isMobileSize(parsedHtml)) {
         //TODO: revert all mobile changes
-        console.debug('removing mobile mode', mobileMode);
         mobileMode = false;
         restoreSidebarToMain(parsedHtml);
         restoreDefaultActive(parsedHtml);
