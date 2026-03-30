@@ -86,7 +86,6 @@ function setActiveTab(tabName: SectionTab): void {
   document.querySelectorAll('a.item').forEach((navItem) => {
     (navItem as HTMLElement).classList.remove('active');
   });
-  console.debug('setting active on ', tabName);
   document
     .querySelector(`a.item[data-tab="${tabName}"]`)
     ?.classList.add('active');
