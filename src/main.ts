@@ -14,7 +14,6 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  console.debug('rendering sheet');
   let skipRenderCount = 2;
   // TODO: WARNING
   // For intial render, html is the whole sheetForm div
@@ -75,11 +74,9 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   const observer = new ResizeObserver((entries) => {
     if (skipRenderCount) {
-      console.log('resize guared', skipRenderCount);
       skipRenderCount -= 1;
       return;
     }
-    console.log('resize triggered');
 
     entries.forEach((entry) => {
       const targetForm = entry.target as HTMLElement;
@@ -92,12 +89,6 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
       const mobileSheet = mobileSheets.get(targetId);
 
       if (!mobileSheet) return;
-
-      console.debug(
-        'resizing!',
-        mobileSheet.mobileViewEnabled,
-        isMobileSize(targetForm),
-      );
 
       if (!mobileSheet.mobileViewEnabled && isMobileSize(targetForm)) {
         mobileSheet.mobileViewEnabled = true;
