@@ -37,8 +37,6 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
     ) as HTMLElement;
   }
 
-  console.debug('parsed form', sheetForm);
-
   const sheetFormId = parseSheetId(_data.document.uuid);
   if (!sheetFormId) {
     console.error('Could not init sheet form id. Skipping mobile processing');

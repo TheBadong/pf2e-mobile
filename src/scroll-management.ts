@@ -36,7 +36,16 @@ export function handleScroll(sheetForm: HTMLElement) {
   };
 
   // Instantly scroll to the last registered scroll position
-  sheetContent.scroll({ top: registeredScroll, left: 0, behavior: 'instant' });
+  console.log('re-rendering, scrolling to after 1 sec', registeredScroll);
+  setTimeout(
+    () =>
+      sheetContent.scroll({
+        top: registeredScroll,
+        left: 0,
+        behavior: 'instant',
+      }),
+    1,
+  );
 
   // Set active item on render
   setActiveTab(
