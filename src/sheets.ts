@@ -1,8 +1,8 @@
-type CharacterSheetId = string;
+type sheetFormId = string;
 
 type MobileSheet = {
   mobileViewEnabled: boolean;
   navbarListener?: EventListener;
 };
 
-export const mobileSheets = new Map<CharacterSheetId, MobileSheet>();
+export const mobileSheets = new Map<sheetFormId, MobileSheet>();

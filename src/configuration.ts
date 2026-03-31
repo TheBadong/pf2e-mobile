@@ -1,7 +1,19 @@
 declare module 'fvtt-types/configuration' {
   namespace Hooks {
-    interface ApplicationConfig {
-      CharacterSheetPF2e: foundry.appv1.api.Application.Any;
+    interface HookConfig {
+      renderCharacterSheetPF2e: (
+        app: Pf2eCharacterSheetData,
+        html: JQuery<HTMLElement>,
+        data: Awaited<ReturnType<Pf2eCharacterSheetData['getData']>>,
+      ) => void;
     }
   }
+}
+
+interface Pf2eCharacterSheetData extends Application.Any {
+  getData: () => {
+    document: {
+      uuid: string;
+    };
+  };
 }

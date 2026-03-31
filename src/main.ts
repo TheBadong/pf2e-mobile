@@ -14,23 +14,45 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  const characterSheet = html.get(0) as HTMLElement;
-  const characterSheetId = characterSheet.id;
+  // TODO: WARNING
+  // For intial render, html is the whole sheetForm div
+  // On re-renders, html if the sheetForm FORM
+  // The Form encapsulates everything, so it shouldn't be a problem. Just a tiny refactor should do.
+  // This project doesn't neeed anything that's outside the form
+  // Except maybe the id.
+  // Fuck ?
+  // Maybe we can get it in _app or _data
 
-  console.debug('Registering Mobile Sheet ', characterSheetId);
+  const parsedHtml = html.get(0) as HTMLElement;
+  // Always work with the form
+  let sheetForm = html.get(0) as HTMLElement;
+  if (
+    parsedHtml.id.startsWith('sheetFormPF2e-Actor') &&
+    parsedHtml.nodeName !== 'form'
+  ) {
+    sheetForm = parsedHtml.querySelector(
+      '.window-content > form',
+    ) as HTMLElement;
+  }
 
-  mobileSheets.set(characterSheetId, { mobileViewEnabled: false });
+  const sheetFormId = _data.document.uuid;
+  if (!sheetFormId) {
+    return;
+  }
+  console.debug('Registering Mobile Sheet ', sheetFormId, sheetForm);
 
-  if (isMobileScreen()) {
-    mobileSheets.set(characterSheetId, { mobileViewEnabled: true });
-    enableMobileView(characterSheet);
+  mobileSheets.set(sheetFormId, { mobileViewEnabled: false });
+
+  if (isMobileScreen() || isMobileSize(sheetForm)) {
+    mobileSheets.set(sheetFormId, { mobileViewEnabled: true });
+    enableMobileView(sheetForm);
   }
 
   new ResizeObserver((entries) => {
     entries.forEach((entry) => {
       const target = entry.target as HTMLElement;
       const targetId = entry.target.id;
-      if (!targetId.startsWith('CharacterSheet')) {
+      if (!targetId.startsWith('sheetForm')) {
         return;
       }
 
@@ -45,27 +67,28 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
       if (mobileSheet.mobileViewEnabled && !isMobileSize(target)) {
         mobileSheet.mobileViewEnabled = false;
-        deactivateMobileView(characterSheet);
+        deactivateMobileView(sheetForm);
         return;
       }
     });
-  }).observe(characterSheet);
+  }).observe(sheetForm);
 });
 
-function enableMobileView(characterSheet: HTMLElement): void {
-  handleMobileSidebar(characterSheet);
-  handleCharacterNavigation(characterSheet);
-  handleScroll(characterSheet);
-  characterSheet.classList.add('mobile-character-sheet');
+function enableMobileView(sheetForm: HTMLElement): void {
+  handleMobileSidebar(sheetForm);
+  handleCharacterNavigation(sheetForm);
+  handleScroll(sheetForm);
+  sheetForm.classList.add('mobile-character-sheet');
 }
 
-function deactivateMobileView(characterSheet: HTMLElement): void {
-  restoreSidebarToMain(characterSheet);
-  restoreDefaultActive(characterSheet);
+function deactivateMobileView(sheetForm: HTMLElement): void {
+  restoreSidebarToMain(sheetForm);
+  restoreDefaultActive(sheetForm);
   // Remove navbarlistener
-  const mobileSheet = mobileSheets.get(characterSheet.id);
+  const mobileSheet = mobileSheets.get(sheetForm.id);
+  console.log('deactivating mobile view for', sheetForm, sheetForm.id);
   if (mobileSheet) {
-    characterSheet
+    sheetForm
       .querySelector('nav.sheet-navigation')
       ?.removeEventListener(
         'click',
@@ -75,5 +98,5 @@ function deactivateMobileView(characterSheet: HTMLElement): void {
     mobileSheet.navbarListener = undefined;
   }
 
-  characterSheet.classList.remove('mobile-character-sheet');
+  sheetForm.classList.remove('mobile-character-sheet');
 }

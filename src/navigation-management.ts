@@ -19,15 +19,10 @@ const navigationBarState: {
   isBeingDragged: false,
 };
 
-export function handleCharacterNavigation(characterSheet: HTMLElement) {
+export function handleCharacterNavigation(sheetForm: HTMLElement) {
   // Move navigation (will be completely moved when dev is over)
-  const sheetContent = characterSheet.querySelector(
-    '.sheet-content',
-  ) as HTMLElement;
-  const sheetForm = document.querySelector(
-    '.window-content form.editable',
-  ) as HTMLElement;
-  const sheetNavigationElement = characterSheet.querySelector(
+  const sheetContent = sheetForm.querySelector('.sheet-content') as HTMLElement;
+  const sheetNavigationElement = sheetForm.querySelector(
     '.sheet-navigation',
   ) as HTMLElement;
 

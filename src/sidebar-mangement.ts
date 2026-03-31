@@ -1,14 +1,13 @@
-export function handleMobileSidebar(characterSheet: HTMLElement) {
-  buildSidebarNavButton(characterSheet);
-  buildSidebarSection(characterSheet);
-  moveSidebarToSheet(characterSheet);
+export function handleMobileSidebar(sheetForm: HTMLElement) {
+  buildSidebarNavButton(sheetForm);
+  buildSidebarSection(sheetForm);
+  moveSidebarToSheet(sheetForm);
 }
 
 /**
  * Remove the original sidebar and move it to the sheet content sections
  */
-export function moveSidebarToSheet(characterSheet: HTMLElement): void {
-  const sheetForm = characterSheet.querySelector('.window-content > form');
+export function moveSidebarToSheet(sheetForm: HTMLElement): void {
   const sheetAside = sheetForm?.querySelector('aside');
 
   if (!sheetAside) {
@@ -16,7 +15,7 @@ export function moveSidebarToSheet(characterSheet: HTMLElement): void {
     return;
   }
 
-  const sidebarSection = buildSidebarSection(characterSheet);
+  const sidebarSection = buildSidebarSection(sheetForm);
 
   sidebarSection.appendChild(sheetAside);
 }
@@ -24,28 +23,28 @@ export function moveSidebarToSheet(characterSheet: HTMLElement): void {
 /**
  * Restore the sidebar to its original location
  */
-export function restoreSidebarToMain(characterSheet: HTMLElement): void {
-  const sectionAside = characterSheet.querySelector(
+export function restoreSidebarToMain(sheetForm: HTMLElement): void {
+  const sectionAside = sheetForm.querySelector(
     '.sheet-content > section[data-tab="sidebar"] aside',
   );
   if (!sectionAside) {
     console.warn('Could not remove aside from section content.');
     return;
   }
-  characterSheet
+  sheetForm
     .querySelector('.sheet-content > section[data-tab="sidebar"]')
     ?.removeChild(sectionAside);
 
-  const mainPageForm = characterSheet.querySelector('.window-content > form');
+  const mainPageForm = sheetForm.querySelector('.window-content > form');
   mainPageForm?.appendChild(sectionAside);
 }
 
 /**
  * If it does not already exist, add the nav button that targets the moved aside
  */
-function buildSidebarNavButton(characterSheet: HTMLElement): HTMLElement {
+function buildSidebarNavButton(sheetForm: HTMLElement): HTMLElement {
   // Prevent building twice
-  let sidebarItemButton = characterSheet.querySelector(
+  let sidebarItemButton = sheetForm.querySelector(
     '.sheet-navigation > a[data-tab="sidebar"]',
   ) as HTMLElement | null;
   if (sidebarItemButton) {
@@ -64,7 +63,7 @@ function buildSidebarNavButton(characterSheet: HTMLElement): HTMLElement {
   sidebarItemButton.appendChild(sidebarItemIcon);
 
   // Append the new button to the navigation row
-  const navigationRow = characterSheet?.querySelector('.sheet-navigation');
+  const navigationRow = sheetForm?.querySelector('.sheet-navigation');
   navigationRow?.insertBefore(sidebarItemButton, navigationRow.childNodes[2]);
 
   return sidebarItemButton;
@@ -73,8 +72,8 @@ function buildSidebarNavButton(characterSheet: HTMLElement): HTMLElement {
 /**
  * If it does not already exist, add the base section that will contain the moved aside
  */
-function buildSidebarSection(characterSheet: HTMLElement): HTMLElement {
-  let sidebarSection = characterSheet.querySelector(
+function buildSidebarSection(sheetForm: HTMLElement): HTMLElement {
+  let sidebarSection = sheetForm.querySelector(
     '.sidebar-section',
   ) as HTMLElement | null;
   if (sidebarSection) return sidebarSection;
@@ -83,10 +82,10 @@ function buildSidebarSection(characterSheet: HTMLElement): HTMLElement {
   sidebarSection.classList.add('tab', 'sidebar-section', 'major');
   sidebarSection.setAttribute('data-group', 'primary');
   sidebarSection.setAttribute('data-tab', 'sidebar');
-  const characterSection = characterSheet?.querySelector(
+  const characterSection = sheetForm?.querySelector(
     'section.tab.character',
   ) as HTMLElement;
-  characterSheet
+  sheetForm
     .querySelector('.sheet-content')
     ?.insertBefore(sidebarSection, characterSection);
 

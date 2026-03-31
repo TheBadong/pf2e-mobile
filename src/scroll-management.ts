@@ -5,8 +5,8 @@ let registeredScroll = 0;
 /**
  * Make the Character Sheet scrollable
  */
-export function handleScroll(characterSheet: HTMLElement) {
-  const mobileSheet = mobileSheets.get(characterSheet.id);
+export function handleScroll(sheetForm: HTMLElement) {
+  const mobileSheet = mobileSheets.get(sheetForm.id);
   if (!mobileSheet) {
     console.error(
       'Sheet not registered for mobile use! Skipping scroll process.',
@@ -14,26 +14,21 @@ export function handleScroll(characterSheet: HTMLElement) {
     return;
   }
 
-  const sheetContent = characterSheet.querySelector(
-    '.sheet-content',
-  ) as HTMLElement;
+  const sheetContent = sheetForm.querySelector('.sheet-content') as HTMLElement;
 
-  const sheetNavigation = characterSheet.querySelector(
+  const sheetNavigation = sheetForm.querySelector(
     '.sheet-navigation',
   ) as HTMLElement;
 
-  makeAllSectionsActive(characterSheet);
+  makeAllSectionsActive(sheetForm);
 
   // Register scroll for isntant scroll back on reload
   // Refactor this sometime
   sheetContent.onscroll = () => {
     registeredScroll = sheetContent.scrollTop;
-    const visibleSection = resolveVisibleSection(
-      characterSheet,
-      registeredScroll,
-    );
+    const visibleSection = resolveVisibleSection(sheetForm, registeredScroll);
     setActiveTab(
-      characterSheet,
+      sheetForm,
       visibleSection?.getAttribute('data-tab') as SectionTab,
     );
   };
@@ -43,8 +38,8 @@ export function handleScroll(characterSheet: HTMLElement) {
 
   // Set active item on render
   setActiveTab(
-    characterSheet,
-    resolveVisibleSection(characterSheet, registeredScroll)?.getAttribute(
+    sheetForm,
+    resolveVisibleSection(sheetForm, registeredScroll)?.getAttribute(
       'data-tab',
     ) as SectionTab,
   );
@@ -86,39 +81,33 @@ export function handleScroll(characterSheet: HTMLElement) {
   });
 }
 
-function setActiveTab(characterSheet: HTMLElement, tabName: SectionTab): void {
-  characterSheet.querySelectorAll('a.item').forEach((navItem) => {
+function setActiveTab(sheetForm: HTMLElement, tabName: SectionTab): void {
+  sheetForm.querySelectorAll('a.item').forEach((navItem) => {
     (navItem as HTMLElement).classList.remove('active');
   });
-  characterSheet
+  sheetForm
     .querySelector(`a.item[data-tab="${tabName}"]`)
     ?.classList.add('active');
 }
 
-function getSections(
-  characterSheet: HTMLElement,
-): Record<SectionTab, HTMLElement> {
+function getSections(sheetForm: HTMLElement): Record<SectionTab, HTMLElement> {
   return {
-    sidebar: characterSheet.querySelector('.a.sidebar') as HTMLElement,
-    character: characterSheet.querySelector('.tab.character') as HTMLElement,
-    actions: characterSheet.querySelector('.tab.actions') as HTMLElement,
-    inventory: characterSheet.querySelector('.tab.inventory') as HTMLElement,
-    spellcasting: characterSheet.querySelector(
-      '.tab.spellcasting',
-    ) as HTMLElement,
-    crafting: characterSheet.querySelector('.tab.crafting') as HTMLElement,
-    proficiencies: characterSheet.querySelector(
-      '.tab.proficiencies',
-    ) as HTMLElement,
-    feats: characterSheet.querySelector('.tab.feats') as HTMLElement,
-    effects: characterSheet.querySelector('.tab.effects') as HTMLElement,
-    biography: characterSheet.querySelector('.tab.biography') as HTMLElement,
-    pfs: characterSheet.querySelector('.tab.pfs') as HTMLElement,
+    sidebar: sheetForm.querySelector('.a.sidebar') as HTMLElement,
+    character: sheetForm.querySelector('.tab.character') as HTMLElement,
+    actions: sheetForm.querySelector('.tab.actions') as HTMLElement,
+    inventory: sheetForm.querySelector('.tab.inventory') as HTMLElement,
+    spellcasting: sheetForm.querySelector('.tab.spellcasting') as HTMLElement,
+    crafting: sheetForm.querySelector('.tab.crafting') as HTMLElement,
+    proficiencies: sheetForm.querySelector('.tab.proficiencies') as HTMLElement,
+    feats: sheetForm.querySelector('.tab.feats') as HTMLElement,
+    effects: sheetForm.querySelector('.tab.effects') as HTMLElement,
+    biography: sheetForm.querySelector('.tab.biography') as HTMLElement,
+    pfs: sheetForm.querySelector('.tab.pfs') as HTMLElement,
   };
 }
 
 function resolveVisibleSection(
-  characterSheet: HTMLElement,
+  sheetForm: HTMLElement,
   scrollValue: number,
 ): HTMLElement | null {
   /**
@@ -127,49 +116,49 @@ function resolveVisibleSection(
    * So round it to resolve the correct section.
    */
   scrollValue = Math.round(scrollValue);
-  const sections = getSections(characterSheet);
+  const sections = getSections(sheetForm);
 
   if (scrollValue < sections.character.offsetTop) {
-    return getSectionByName(characterSheet, 'sidebar');
+    return getSectionByName(sheetForm, 'sidebar');
   } else if (scrollValue < sections.actions.offsetTop) {
-    return getSectionByName(characterSheet, 'character');
+    return getSectionByName(sheetForm, 'character');
   } else if (scrollValue < sections.inventory.offsetTop) {
-    return getSectionByName(characterSheet, 'actions');
+    return getSectionByName(sheetForm, 'actions');
   } else if (scrollValue < sections.spellcasting.offsetTop) {
-    return getSectionByName(characterSheet, 'inventory');
+    return getSectionByName(sheetForm, 'inventory');
   } else if (scrollValue < sections.crafting.offsetTop) {
-    return getSectionByName(characterSheet, 'spellcasting');
+    return getSectionByName(sheetForm, 'spellcasting');
   } else if (scrollValue < sections.proficiencies.offsetTop) {
-    return getSectionByName(characterSheet, 'crafting');
+    return getSectionByName(sheetForm, 'crafting');
   } else if (scrollValue < sections.feats.offsetTop) {
-    return getSectionByName(characterSheet, 'proficiencies');
+    return getSectionByName(sheetForm, 'proficiencies');
   } else if (scrollValue < sections.effects.offsetTop) {
-    return getSectionByName(characterSheet, 'feats');
+    return getSectionByName(sheetForm, 'feats');
   } else if (scrollValue < sections.biography.offsetTop) {
-    return getSectionByName(characterSheet, 'effects');
+    return getSectionByName(sheetForm, 'effects');
   } else if (
     scrollValue <
     sections.pfs.offsetTop - 1 /** no one will ever know */
   ) {
-    return getSectionByName(characterSheet, 'biography');
+    return getSectionByName(sheetForm, 'biography');
   } else {
-    return getSectionByName(characterSheet, 'pfs');
+    return getSectionByName(sheetForm, 'pfs');
   }
 }
 
 function getSectionByName(
-  characterSheet: HTMLElement,
+  sheetForm: HTMLElement,
   name: SectionTab,
 ): HTMLElement | null {
-  return characterSheet.querySelector(`.tab[data-tab="${name}"]`);
+  return sheetForm.querySelector(`.tab[data-tab="${name}"]`);
 }
 
 /**
  * add the "active" class to alll the sheet' sections
  */
-export function makeAllSectionsActive(characterSheet: HTMLElement): void {
-  for (const child of characterSheet.querySelector('.sheet-content')
-    ?.children ?? []) {
+export function makeAllSectionsActive(sheetForm: HTMLElement): void {
+  for (const child of sheetForm.querySelector('.sheet-content')?.children ??
+    []) {
     child.classList.add('active');
   }
 }
@@ -178,13 +167,13 @@ export function makeAllSectionsActive(characterSheet: HTMLElement): void {
  * Remove the "active" class from all tje sheet' sections and make only the default tab active
  * TODO (later): make active the tab that was active in the opposite state
  */
-export function restoreDefaultActive(characterSheet: HTMLElement): void {
-  for (const child of characterSheet.querySelector('.sheet-content')
-    ?.children ?? []) {
+export function restoreDefaultActive(sheetForm: HTMLElement): void {
+  for (const child of sheetForm.querySelector('.sheet-content')?.children ??
+    []) {
     child.classList.remove('active');
   }
 
-  characterSheet
+  sheetForm
     .querySelector('.sheet-content .tab.character.major')
     ?.classList.add('active');
 }
