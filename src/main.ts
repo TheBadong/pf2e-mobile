@@ -2,8 +2,8 @@ import { handleCharacterNavigation } from './navigation-management';
 import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
-import { isMobileScreen, isMobileSize } from './utils';
-import { mobileSheets } from './sheets';
+import { isMobileScreen, isMobileSize, parseSheetId } from './utils';
+import { mobileSheets, type MobileSheet } from './sheets';
 
 Hooks.once('init', () => {
   console.debug('pf2e mobile starts');
@@ -14,6 +14,8 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
+  console.debug('rendering sheet');
+  let skipRenderCount = 2;
   // TODO: WARNING
   // For intial render, html is the whole sheetForm div
   // On re-renders, html if the sheetForm FORM
@@ -25,9 +27,10 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   const parsedHtml = html.get(0) as HTMLElement;
   // Always work with the form
-  let sheetForm = html.get(0) as HTMLElement;
+  let sheetForm = parsedHtml;
+
   if (
-    parsedHtml.id.startsWith('sheetFormPF2e-Actor') &&
+    parsedHtml.id.startsWith('CharacterSheetPF2e-Actor') &&
     parsedHtml.nodeName !== 'form'
   ) {
     sheetForm = parsedHtml.querySelector(
@@ -35,46 +38,88 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
     ) as HTMLElement;
   }
 
-  const sheetFormId = _data.document.uuid;
+  console.debug('parsed form', sheetForm);
+
+  const sheetFormId = parseSheetId(_data.document.uuid);
   if (!sheetFormId) {
+    console.error('Could not init sheet form id. Skipping mobile processing');
     return;
   }
+
+  sheetForm.setAttribute('data-sheet-id', sheetFormId);
+
   console.debug('Registering Mobile Sheet ', sheetFormId, sheetForm);
 
-  mobileSheets.set(sheetFormId, { mobileViewEnabled: false });
+  let mobileSheet = mobileSheets.get(
+    sheetForm.getAttribute('data-sheet-id') as string,
+  );
 
-  if (isMobileScreen() || isMobileSize(sheetForm)) {
+  let isMobileView = false;
+
+  if (mobileSheet) {
+    mobileSheet.resizeObserver?.disconnect();
+    isMobileView = mobileSheet.mobileViewEnabled;
+  } else {
+    isMobileView = isMobileScreen() || isMobileSize(sheetForm);
+    mobileSheets.set(sheetFormId, { mobileViewEnabled: false });
+  }
+
+  mobileSheet = mobileSheets.get(
+    sheetForm.getAttribute('data-sheet-id') as string,
+  ) as MobileSheet;
+
+  if (isMobileView) {
     mobileSheets.set(sheetFormId, { mobileViewEnabled: true });
     enableMobileView(sheetForm);
   }
 
-  new ResizeObserver((entries) => {
+  const observer = new ResizeObserver((entries) => {
+    if (skipRenderCount) {
+      console.log('resize guared', skipRenderCount);
+      skipRenderCount -= 1;
+      return;
+    }
+    console.log('resize triggered');
+
     entries.forEach((entry) => {
-      const target = entry.target as HTMLElement;
-      const targetId = entry.target.id;
-      if (!targetId.startsWith('sheetForm')) {
+      const targetForm = entry.target as HTMLElement;
+      const targetId = targetForm.getAttribute('data-sheet-id') as string;
+      if (!targetId) {
+        console.error('Could not find sheet Id, skipping mobile prcessing.');
         return;
       }
 
       const mobileSheet = mobileSheets.get(targetId);
+
       if (!mobileSheet) return;
 
-      if (!mobileSheet.mobileViewEnabled && isMobileSize(target)) {
+      console.debug(
+        'resizing!',
+        mobileSheet.mobileViewEnabled,
+        isMobileSize(targetForm),
+      );
+
+      if (!mobileSheet.mobileViewEnabled && isMobileSize(targetForm)) {
         mobileSheet.mobileViewEnabled = true;
-        enableMobileView(target);
+        enableMobileView(targetForm);
         return;
       }
 
-      if (mobileSheet.mobileViewEnabled && !isMobileSize(target)) {
+      if (mobileSheet.mobileViewEnabled && !isMobileSize(targetForm)) {
         mobileSheet.mobileViewEnabled = false;
         deactivateMobileView(sheetForm);
         return;
       }
     });
-  }).observe(sheetForm);
+  });
+
+  mobileSheet.resizeObserver = observer;
+
+  mobileSheet.resizeObserver.observe(sheetForm);
 });
 
 function enableMobileView(sheetForm: HTMLElement): void {
+  console.debug('Enabling mobile view');
   handleMobileSidebar(sheetForm);
   handleCharacterNavigation(sheetForm);
   handleScroll(sheetForm);
@@ -82,11 +127,13 @@ function enableMobileView(sheetForm: HTMLElement): void {
 }
 
 function deactivateMobileView(sheetForm: HTMLElement): void {
+  console.debug('disabling mobile view');
   restoreSidebarToMain(sheetForm);
   restoreDefaultActive(sheetForm);
   // Remove navbarlistener
-  const mobileSheet = mobileSheets.get(sheetForm.id);
-  console.log('deactivating mobile view for', sheetForm, sheetForm.id);
+  const mobileSheet = mobileSheets.get(
+    sheetForm.getAttribute('data-sheet-id') as string,
+  );
   if (mobileSheet) {
     sheetForm
       .querySelector('nav.sheet-navigation')

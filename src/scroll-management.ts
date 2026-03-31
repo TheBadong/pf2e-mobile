@@ -6,7 +6,9 @@ let registeredScroll = 0;
  * Make the Character Sheet scrollable
  */
 export function handleScroll(sheetForm: HTMLElement) {
-  const mobileSheet = mobileSheets.get(sheetForm.id);
+  const mobileSheet = mobileSheets.get(
+    sheetForm.getAttribute('data-sheet-id') as string,
+  );
   if (!mobileSheet) {
     console.error(
       'Sheet not registered for mobile use! Skipping scroll process.',

@@ -2,14 +2,14 @@
 @use './editable-sheet.scss';
 
 body {
-  background-color: rebeccapurple;
+  background-color: blue;
 }
 @media (min-width: 581px) {
 }
 
-body div.mobile-character-sheet {
+body form.mobile-character-sheet {
   // Hide the default sidebar in mobile mode
-  .window-content form.crb-style {
+  &.crb-style {
     grid: none;
     display: flex;
     flex-direction: row;

@@ -35,8 +35,7 @@ export function restoreSidebarToMain(sheetForm: HTMLElement): void {
     .querySelector('.sheet-content > section[data-tab="sidebar"]')
     ?.removeChild(sectionAside);
 
-  const mainPageForm = sheetForm.querySelector('.window-content > form');
-  mainPageForm?.appendChild(sectionAside);
+  sheetForm.appendChild(sectionAside);
 }
 
 /**
