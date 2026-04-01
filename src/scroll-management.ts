@@ -1,4 +1,4 @@
-import { mobileSheets } from './sheets';
+import { domSheets } from './sheets';
 
 /** Saved scroll positiion */
 let registeredScroll = 0;
@@ -6,7 +6,7 @@ let registeredScroll = 0;
  * Make the Character Sheet scrollable
  */
 export function handleScroll(sheetForm: HTMLElement) {
-  const mobileSheet = mobileSheets.get(
+  const mobileSheet = domSheets.get(
     sheetForm.getAttribute('data-sheet-id') as string,
   );
   if (!mobileSheet) {

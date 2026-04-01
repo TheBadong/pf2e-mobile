@@ -3,7 +3,7 @@ import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
 import { isMobileScreen, isMobileSize, parseSheetId } from './utils';
-import { mobileSheets, type MobileSheet } from './sheets';
+import { domSheets, type SheetDomData } from './sheets';
 
 Hooks.once('init', () => {
   console.debug('pf2e mobile starts');
@@ -30,7 +30,7 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   if (
     parsedHtml.id.startsWith('CharacterSheetPF2e-Actor') &&
-    parsedHtml.nodeName !== 'form'
+    parsedHtml.nodeName !== 'FORM'
   ) {
     sheetForm = parsedHtml.querySelector(
       '.window-content > form',
@@ -47,7 +47,7 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   console.debug('Registering Mobile Sheet ', sheetFormId, sheetForm);
 
-  let mobileSheet = mobileSheets.get(
+  let mobileSheet = domSheets.get(
     sheetForm.getAttribute('data-sheet-id') as string,
   );
 
@@ -58,15 +58,15 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
     isMobileView = mobileSheet.mobileViewEnabled;
   } else {
     isMobileView = isMobileScreen() || isMobileSize(sheetForm);
-    mobileSheets.set(sheetFormId, { mobileViewEnabled: false });
+    domSheets.set(sheetFormId, { mobileViewEnabled: false });
   }
 
-  mobileSheet = mobileSheets.get(
+  mobileSheet = domSheets.get(
     sheetForm.getAttribute('data-sheet-id') as string,
-  ) as MobileSheet;
+  ) as SheetDomData;
 
   if (isMobileView) {
-    mobileSheets.set(sheetFormId, { mobileViewEnabled: true });
+    domSheets.set(sheetFormId, { mobileViewEnabled: true });
     enableMobileView(sheetForm);
   }
 
@@ -84,7 +84,7 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
         return;
       }
 
-      const mobileSheet = mobileSheets.get(targetId);
+      const mobileSheet = domSheets.get(targetId);
 
       if (!mobileSheet) return;
 
@@ -120,7 +120,7 @@ function deactivateMobileView(sheetForm: HTMLElement): void {
   restoreSidebarToMain(sheetForm);
   restoreDefaultActive(sheetForm);
   // Remove navbarlistener
-  const mobileSheet = mobileSheets.get(
+  const mobileSheet = domSheets.get(
     sheetForm.getAttribute('data-sheet-id') as string,
   );
   if (mobileSheet) {

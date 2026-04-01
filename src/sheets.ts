@@ -1,9 +1,9 @@
-type sheetFormId = string;
+type SheetFormId = string;
 
-export type MobileSheet = {
+export type SheetDomData = {
   mobileViewEnabled: boolean;
   navbarListener?: EventListener;
   resizeObserver?: ResizeObserver;
 };
 
-export const mobileSheets = new Map<sheetFormId, MobileSheet>();
+export const domSheets = new Map<SheetFormId, SheetDomData>();
