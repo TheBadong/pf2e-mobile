@@ -62,26 +62,31 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   const observer = new ResizeObserver((entries) => {
     entries.forEach((entry) => {
-      const targetForm = entry.target as HTMLElement;
-      const targetId = targetForm.getAttribute('data-sheet-id') as string;
-      if (!targetId) {
-        console.error('Could not find sheet Id, skipping mobile prcessing.');
+      const resizedSheetForm = entry.target.querySelector(
+        'form.crb-style',
+      ) as HTMLElement | null;
+      const resizedCharacterId = parseCharacterId(characterSheet.id);
+      if (!resizedSheetForm || !resizedCharacterId) {
+        console.error('Could not find sheet Id, skipping mobile prcessing.', {
+          resizedSheetForm,
+          resizedCharacterId,
+        });
         return;
       }
 
-      const mobileSheet = domSheets.get(targetId);
+      const mobileSheet = domSheets.get(characterId);
 
       if (!mobileSheet) return;
 
-      if (!mobileSheet.mobileViewEnabled && isMobileSize(targetForm)) {
+      if (!mobileSheet.mobileViewEnabled && isMobileSize(resizedSheetForm)) {
         mobileSheet.mobileViewEnabled = true;
-        enableMobileView(targetForm);
+        enableMobileView(resizedSheetForm);
         return;
       }
 
-      if (mobileSheet.mobileViewEnabled && !isMobileSize(targetForm)) {
+      if (mobileSheet.mobileViewEnabled && !isMobileSize(resizedSheetForm)) {
         mobileSheet.mobileViewEnabled = false;
-        deactivateMobileView(sheetForm);
+        deactivateMobileView(resizedSheetForm);
         return;
       }
     });
@@ -158,7 +163,7 @@ function parseRenderedHtml(
 
   if (parsedHtml?.nodeName === 'FORM') {
     characterSheet = document.querySelector(
-      `#id="CharacterSheetPF2e-Actor-${characterId}"`,
+      `#CharacterSheetPF2e-Actor-${characterId}`,
     ) as HTMLElement | null;
     sheetForm = parsedHtml;
     isFormUpdate = true;
