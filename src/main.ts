@@ -2,7 +2,7 @@ import { handleCharacterNavigation } from './navigation-management';
 import { handleMobileSidebar, restoreSidebarToMain } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll, restoreDefaultActive } from './scroll-management';
-import { isMobileScreen, isMobileSize, parseSheetId } from './utils';
+import { isMobileScreen, isMobileSize, parseCharacterId } from './utils';
 import { domSheets, type SheetDomData } from './sheets';
 
 Hooks.once('init', () => {
@@ -14,38 +14,28 @@ Hooks.once('init', () => {
  * Add a new button that displays the sidebar information in a dedicated page
  */
 Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
-  let skipRenderCount = 2;
-  // TODO: WARNING
-  // For intial render, html is the whole sheetForm div
-  // On re-renders, html if the sheetForm FORM
-  // The Form encapsulates everything, so it shouldn't be a problem. Just a tiny refactor should do.
-  // This project doesn't neeed anything that's outside the form
-  // Except maybe the id.
-  // Fuck ?
-  // Maybe we can get it in _app or _data
-
-  const parsedHtml = html.get(0) as HTMLElement;
-  // Always work with the form
-  let sheetForm = parsedHtml;
-
-  if (
-    parsedHtml.id.startsWith('CharacterSheetPF2e-Actor') &&
-    parsedHtml.nodeName !== 'FORM'
-  ) {
-    sheetForm = parsedHtml.querySelector(
-      '.window-content > form',
-    ) as HTMLElement;
-  }
-
-  const sheetFormId = parseSheetId(_data.document.uuid);
-  if (!sheetFormId) {
-    console.error('Could not init sheet form id. Skipping mobile processing');
+  const characterId = parseCharacterId(_data.document.uuid);
+  if (!characterId) {
+    console.error(
+      'Could not parse character id. Skipping mobile sheet rendering',
+    );
     return;
   }
 
-  sheetForm.setAttribute('data-sheet-id', sheetFormId);
+  // Get sheet dom elements
+  let characterSheet, sheetForm, isFormUpdate;
+  try {
+    ({ characterSheet, sheetForm, isFormUpdate } = parseRenderedHtml(
+      html,
+      characterId,
+    ));
+  } catch (e) {
+    console.error('Could not parse sheet html. Skipping mobile rendering.', e);
+    return;
+  }
 
-  console.debug('Registering Mobile Sheet ', sheetFormId, sheetForm);
+  sheetForm.setAttribute('data-sheet-id', characterId);
+  console.debug('Registering Mobile Sheet ', characterId);
 
   let mobileSheet = domSheets.get(
     sheetForm.getAttribute('data-sheet-id') as string,
@@ -58,7 +48,7 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
     isMobileView = mobileSheet.mobileViewEnabled;
   } else {
     isMobileView = isMobileScreen() || isMobileSize(sheetForm);
-    domSheets.set(sheetFormId, { mobileViewEnabled: false });
+    domSheets.set(characterId, { mobileViewEnabled: false });
   }
 
   mobileSheet = domSheets.get(
@@ -66,16 +56,11 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   ) as SheetDomData;
 
   if (isMobileView) {
-    domSheets.set(sheetFormId, { mobileViewEnabled: true });
+    domSheets.set(characterId, { mobileViewEnabled: true });
     enableMobileView(sheetForm);
   }
 
   const observer = new ResizeObserver((entries) => {
-    if (skipRenderCount) {
-      skipRenderCount -= 1;
-      return;
-    }
-
     entries.forEach((entry) => {
       const targetForm = entry.target as HTMLElement;
       const targetId = targetForm.getAttribute('data-sheet-id') as string;
@@ -104,7 +89,10 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
 
   mobileSheet.resizeObserver = observer;
 
-  mobileSheet.resizeObserver.observe(sheetForm);
+  if (isFormUpdate) {
+    console.info('Do not reobserve on re-renders');
+  }
+  mobileSheet.resizeObserver.observe(characterSheet);
 });
 
 function enableMobileView(sheetForm: HTMLElement): void {
@@ -135,4 +123,53 @@ function deactivateMobileView(sheetForm: HTMLElement): void {
   }
 
   sheetForm.classList.remove('mobile-character-sheet');
+}
+
+/**
+ * Parse the Character Sheet and the Sheet Form.
+ *
+ * @param renderedHtml The raw HTML passed to the Hook
+ * @param characterId The character id used to identify the Sheet
+ *
+ * @throws If no sheet nor form can be parsed
+ */
+function parseRenderedHtml(
+  renderedHtml: JQuery<HTMLElement>,
+  characterId: string,
+): {
+  characterSheet: HTMLElement;
+  sheetForm: HTMLElement;
+  isFormUpdate: boolean; // Might not need this
+} {
+  const parsedHtml = renderedHtml.get(0) as HTMLElement | null;
+  let characterSheet;
+  let sheetForm;
+  let isFormUpdate = false;
+
+  if (
+    parsedHtml?.id.startsWith('CharacterSheet') &&
+    parsedHtml?.nodeName !== 'FORM'
+  ) {
+    characterSheet = parsedHtml;
+    sheetForm = parsedHtml.querySelector(
+      'form.crb-style',
+    ) as HTMLElement | null;
+  }
+
+  if (parsedHtml?.nodeName === 'FORM') {
+    characterSheet = document.querySelector(
+      `#id="CharacterSheetPF2e-Actor-${characterId}"`,
+    ) as HTMLElement | null;
+    sheetForm = parsedHtml;
+    isFormUpdate = true;
+  }
+
+  if (!parsedHtml || !characterSheet || !sheetForm)
+    throw new Error('Unable to parse character sheet or form.');
+
+  return {
+    characterSheet,
+    sheetForm,
+    isFormUpdate,
+  };
 }

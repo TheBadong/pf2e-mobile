@@ -10,7 +10,15 @@ export function isMobileScreen(): boolean {
   return window.screen.width < MAX_MOBILE_SCREEN_WIDTH;
 }
 
-export function parseSheetId(s: string): string | null {
+export function parseSheetIdFromHtml(h: HTMLElement): string | null {
+  if (h.nodeName === 'FORM') {
+    return h.getAttribute('data-sheet-id');
+  }
+
+  return h.id.split('-')[2];
+}
+
+export function parseCharacterId(s: string): string | null {
   if (s.startsWith('CharacterSheet')) {
     return s.split('-')[2];
   }
