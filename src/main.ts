@@ -44,7 +44,6 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   let isMobileView = false;
 
   if (mobileSheet) {
-    mobileSheet.resizeObserver?.disconnect();
     isMobileView = mobileSheet.mobileViewEnabled;
   } else {
     isMobileView = isMobileScreen() || isMobileSize(sheetForm);
