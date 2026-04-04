@@ -30,29 +30,8 @@ export function handleCharacterNavigation(sheetForm: HTMLElement) {
   sheetNavigationElement.draggable = true;
 
   // Build drop zones
-  const dropZones = document.createElement('div');
-  dropZones.style.display = 'none';
-  dropZones.style.backgroundColor = 'darkgray';
-  dropZones.style.opacity = '0.8';
-  dropZones.style.position = 'absolute';
-  dropZones.style.top = '0px';
-  dropZones.style.width = '100vw';
-  dropZones.style.height = '100vh';
-
-  const dropZoneLeft = document.createElement('div') as HTMLElement;
-  dropZoneLeft.style.display = 'inline-block';
-  dropZoneLeft.style.width = '50vw';
-  dropZoneLeft.style.height = '80vh';
-  const dropZoneRight = dropZoneLeft.cloneNode() as HTMLElement;
-  const dropZoneTop = document.createElement('div') as HTMLElement;
-  dropZoneTop.style.display = 'inline-block';
-  dropZoneTop.style.width = '100vw';
-  dropZoneTop.style.height = '10vh';
-  dropZones.appendChild(dropZoneTop);
-  dropZones.appendChild(dropZoneLeft);
-  dropZones.appendChild(dropZoneRight);
-
-  sheetContent.appendChild(dropZones);
+  const { dropZones, dropZoneTop, dropZoneLeft, dropZoneRight } =
+    buildDropZones(sheetContent);
 
   // Register the target detection div
   sheetNavigationElement.ondragstart = () => {
@@ -86,4 +65,38 @@ export function handleCharacterNavigation(sheetForm: HTMLElement) {
       sheetForm.classList.remove('navigation-sides');
     }
   };
+}
+
+function buildDropZones(sheetContent: HTMLElement): {
+  dropZones: HTMLElement;
+  dropZoneTop: HTMLElement;
+  dropZoneRight: HTMLElement;
+  dropZoneLeft: HTMLElement;
+} {
+  // Build drop zones
+  const dropZones = document.createElement('div');
+  dropZones.style.display = 'none';
+  dropZones.style.backgroundColor = 'darkgray';
+  dropZones.style.opacity = '0.8';
+  dropZones.style.position = 'absolute';
+  dropZones.style.top = '0px';
+  dropZones.style.width = '100vw';
+  dropZones.style.height = '100vh';
+
+  const dropZoneLeft = document.createElement('div') as HTMLElement;
+  dropZoneLeft.style.display = 'inline-block';
+  dropZoneLeft.style.width = '50vw';
+  dropZoneLeft.style.height = '80vh';
+  const dropZoneRight = dropZoneLeft.cloneNode() as HTMLElement;
+  const dropZoneTop = document.createElement('div') as HTMLElement;
+  dropZoneTop.style.display = 'inline-block';
+  dropZoneTop.style.width = '100vw';
+  dropZoneTop.style.height = '10vh';
+  dropZones.appendChild(dropZoneTop);
+  dropZones.appendChild(dropZoneLeft);
+  dropZones.appendChild(dropZoneRight);
+
+  sheetContent.appendChild(dropZones);
+
+  return { dropZones, dropZoneTop, dropZoneLeft, dropZoneRight };
 }
