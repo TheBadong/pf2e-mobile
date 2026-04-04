@@ -29,7 +29,7 @@
       {
         "id": "pf2e",
         "type": "system",
-        "manifest": "https://github.com/foundryvtt/pf2e/blob/v13-dev/system.pf2e.json",
+        "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/refs/heads/v13-dev/system.pf2e.json",
         "compatibility": {
           "verified": "7.11.2"
         }
@@ -39,7 +39,7 @@
       {
         "id": "mobile-improvements",
         "type": "module",
-        "manifest": "https://gitlab.com/fvtt-modules-lab/mobile-improvements/-/blob/master/src/module.json",
+        "manifest": "https://gitlab.com/fvtt-modules-lab/mobile-improvements/-/jobs/artifacts/v2.0.0/raw/module.json?job=build-release",
         "compatibility": {
           "verified": "?"
         }
