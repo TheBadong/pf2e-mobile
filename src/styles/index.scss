@@ -1,6 +1,10 @@
 @use './sheet-navigation.scss';
 @use './editable-sheet.scss';
 
+body {
+  background-color: red;
+}
+
 @media (min-width: 581px) {
   .sheet-navigation {
     a[data-tab='sidebar'] {
@@ -72,6 +76,20 @@
       section[data-tab='encounter'] {
         ol.actions-list.strikes-list > li {
           grid: none;
+        }
+      }
+
+      section [data-tab='inventory'] {
+        .coinage .currency {
+          flex-wrap: wrap;
+          row-gap: 5px;
+          li:not(.denomination):not(.label) {
+            flex-basis: 33%;
+
+            button {
+              width: 100%;
+            }
+          }
         }
       }
     }
