@@ -73,8 +73,32 @@ function buildDropZones(sheetContent: HTMLElement): {
   dropZoneRight: HTMLElement;
   dropZoneLeft: HTMLElement;
 } {
+  const dropZonesId = 'drop-zones';
+  const dropZoneTopId = 'drop-zone-top';
+  const dropZoneLeftId = 'drop-zone-left';
+  const dropZoneRightId = 'drop-zone-right';
+  // Build only once
+
+  let dropZones = sheetContent.querySelector(
+    `#${dropZonesId}`,
+  ) as HTMLElement | null;
+  if (dropZones) {
+    return {
+      dropZones,
+      dropZoneTop: sheetContent.querySelector(
+        `#${dropZoneTopId}`,
+      ) as HTMLElement,
+      dropZoneLeft: sheetContent.querySelector(
+        `#${dropZoneLeftId}`,
+      ) as HTMLElement,
+      dropZoneRight: sheetContent.querySelector(
+        `#${dropZoneRightId}`,
+      ) as HTMLElement,
+    };
+  }
   // Build drop zones
-  const dropZones = document.createElement('div');
+  dropZones = document.createElement('div');
+  dropZones.id = dropZonesId;
   dropZones.style.display = 'none';
   dropZones.style.backgroundColor = 'darkgray';
   dropZones.style.opacity = '0.8';
@@ -84,11 +108,14 @@ function buildDropZones(sheetContent: HTMLElement): {
   dropZones.style.height = '100vh';
 
   const dropZoneLeft = document.createElement('div') as HTMLElement;
+  dropZoneLeft.id = dropZoneLeftId;
   dropZoneLeft.style.display = 'inline-block';
   dropZoneLeft.style.width = '50vw';
   dropZoneLeft.style.height = '80vh';
   const dropZoneRight = dropZoneLeft.cloneNode() as HTMLElement;
+  dropZoneRight.id = dropZoneRightId;
   const dropZoneTop = document.createElement('div') as HTMLElement;
+  dropZoneTop.id = dropZoneTopId;
   dropZoneTop.style.display = 'inline-block';
   dropZoneTop.style.width = '100vw';
   dropZoneTop.style.height = '10vh';
