@@ -1,9 +1,6 @@
 @use './sheet-navigation.scss';
 @use './editable-sheet.scss';
 
-body {
-  background-color: blue;
-}
 @media (min-width: 581px) {
 }
 
@@ -66,6 +63,19 @@ body form.mobile-character-sheet {
       section[data-tab='encounter'] {
         ol.actions-list.strikes-list > li {
           grid: none;
+          display: flex;
+          flex-direction: row;
+          gap: 0.3rem;
+
+          .item-image {
+            grid-area: unset;
+            flex-basis: 10%;
+            max-width: 2rem;
+          }
+
+          section .button-group.tags {
+            flex-wrap: wrap;
+          }
         }
       }
 
@@ -79,6 +89,18 @@ body form.mobile-character-sheet {
             button {
               width: 100%;
             }
+          }
+        }
+      }
+
+      section [data-tab='proficiencies'] {
+        ul.proficiencies-list {
+          display: flex;
+          flex-wrap: wrap;
+
+          li {
+            flex: 1 1 0px;
+            min-width: 14.6rem;
           }
         }
       }
