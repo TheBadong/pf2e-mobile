@@ -9,5 +9,5 @@ cd release
 zip -r module.zip ./pf2e-mobile
 rm -rf ./pf2e-mobile
 cd ../
-gh release create $VERSION "./release/*" --draft --title "PF2E Mobile $VERSION"
-rm -rf ./release
+gh release create "$VERSION" ./release/* --draft --title "PF2E Mobile $VERSION"
+rm -rf release
