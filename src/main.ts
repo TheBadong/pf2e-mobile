@@ -7,6 +7,7 @@ import { handleMobileSidebar } from './sidebar-mangement';
 import './styles/index.scss';
 import { handleScroll } from './scroll-management';
 import { isMobileMode } from './utils';
+import removeDraggables from './ux/removeDraggables';
 
 // CONFIG.debug.hooks = !CONFIG.debug.hooks;
 // console.warn('Set Hook Debugging to', CONFIG.debug.hooks);
@@ -28,4 +29,7 @@ Hooks.on('renderCharacterSheetPF2e', async (_app, html, _data) => {
   handleCharacterNavigation(html);
   handleSwipe(html);
   handleScroll(html);
+
+  // Other improvements
+  removeDraggables(html);
 });
