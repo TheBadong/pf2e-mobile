@@ -4,10 +4,9 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["vite/client", "fvtt-types"],
+    "types": ["vite/client", "fvtt-types", "node"],
     "skipLibCheck": true,
     "outDir": "dist",
-    "baseUrl": ".",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -16,7 +15,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "paths": {
-      "styles/*": ["src/styles/*"]
+      "styles/*": ["./src/styles/*"]
     },
 
     /* Linting */
@@ -27,5 +26,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "bin"]
 }

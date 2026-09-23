@@ -1,20 +1,28 @@
-import fs from 'fs';
 import 'dotenv/config';
-
-const currentPath = import.meta.dirname;
-
-const foundryDataPath = process.env.DATA_PATH;
+import * as fs from 'node:fs';
 
 const moduleName = 'pf2e-mobile';
 
-if (!foundryDataPath) {
-  console.error(
-    'No FroundryVTT Data path found! Make sure path is set in .env',
-  );
-  process.exit();
+const currentPath = import.meta.dirname;
+
+const defaultDataPath = process.env.HOME + '/foundrydata';
+const customDataPath = process.env.DATA_PATH;
+
+let foundryDataPath = defaultDataPath;
+
+if (customDataPath) {
+  if (!fs.existsSync(`${customDataPath}`)) {
+    console.error(
+      'No FroundryVTT Data path found! Make sure path is correct in .env',
+    );
+    process.exit(1);
+  }
+  
+  foundryDataPath = customDataPath;
 }
 
-// console.log(fs.existsSync(`${foundryDataPath}/modules/mobile-sheet/`));
+console.info('Using foundry data path: ' + foundryDataPath);
+
 if (!fs.existsSync(`${foundryDataPath}/modules/`)) {
   fs.mkdirSync(`${foundryDataPath}/modules/`);
 }
@@ -22,7 +30,7 @@ if (!fs.existsSync(`${foundryDataPath}/modules/`)) {
 if (!fs.existsSync(`${foundryDataPath}/modules/${moduleName}`)) {
   fs.symlinkSync(
     `${currentPath}/../dist`,
-    `${foundryDataPath}/modules/${moduleName}`,
+    `${foundryDataPath}/Data/modules/${moduleName}`,
   );
 }
 

@@ -2,6 +2,13 @@ import { build, defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
+    watch: {
+      buildDelay: 100,
+      chokidar: {
+        usePolling: true,
+        interval: 100,
+      },
+    },
     lib: {
       name: 'fvttMobile',
       entry: ['src/main.ts'],
@@ -20,7 +27,6 @@ export default defineConfig({
           return names[0];
         },
       },
-      watch: { buildDelay: 100 },
     },
   },
 });

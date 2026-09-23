@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/node": "^25.3.2",
+    "@types/node": "^25.9.8",
     "fvtt-types": "npm:@league-of-foundry-developers/foundry-vtt-types@^13.346.0-beta.20250812191140",
     "sass-embedded": "^1.97.3",
     "typescript": "~5.9.3",
