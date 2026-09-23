@@ -12,7 +12,7 @@ import { isMobileMode } from './utils';
 // console.warn('Set Hook Debugging to', CONFIG.debug.hooks);
 
 Hooks.once('init', () => {
-  console.debug('pf2e mobile registeresd');
+  console.debug('pf2e mobile registered');
   // Reset session
   sessionStorage.removeItem(`${MODULE_ID}_sidebar_state`);
 });
